@@ -11,6 +11,7 @@ import TopNav from '../components/TopNav'
 function MyApp({Component, pageProps}){
     
     return (<Provider>
+    <TopNav/>
      <ToastContainer position="top-center" /> 
      <Component {...pageProps} /> 
      </Provider>);

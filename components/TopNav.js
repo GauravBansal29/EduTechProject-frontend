@@ -1,38 +1,60 @@
+import {Menu} from "antd"
+import Link from "next/link"
+import {useEffect, useState, useContext} from "react"
+import {toast} from "react-toastify"
+import {useRouter} from "next/router"
+import {Context} from "../context"
+import axios from "axios"
 
+
+const {Item} = Menu ;
 const TopNav= ()=>{
+    
+    const {state, dispatch}= useContext(Context);
+    const {user}= state;  //user is there in the current state 
+    const router = useRouter();
+    const [current,setCurrent]= useState(null);
+    const onLogoutHandler= async()=>{
+  
+      try{
+        dispatch({type:"LOGOUT"});
+        localStorage.removeItem("user");
+        const res= await axios.get(`${process.env.NEXT_PUBLIC_API}/logout`);
+        toast(res.data);
+        router.push("/login");
+      }
+      catch(err)
+      {
+        console.log(err);
+    
+      }
+    
+    }
+    useEffect(()=>{
+      process.browser && setCurrent(window.location.pathname);
+    },[process.browser && window.location.pathname]);
+    return (
+      <Menu  mode="horizontal" selectedKeys={[current]}>
+      <Item key="/" onClick={(e)=>{setCurrent(e.key)}}>
+        <Link href="/"><a>Home</a></Link>
+      </Item>
+      {!user && 
+      <>
+      <Item key="/login" onClick={(e)=>{setCurrent(e.key)}}> 
+      <Link href="/login"><a>Login</a></Link>
+      </Item>
+      <Item key="/register" onClick={(e)=>{setCurrent(e.key)}}>
+      <Link href="/register"><a>Register</a></Link>
+      </Item>
+      </>}
+      
+     {user &&  <Item style={{ marginLeft: 'auto' }} onClick={onLogoutHandler}>
+      Logout
+      </Item>}
+      </Menu>
+      
+  );
 
-    return (<div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">edily</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <Link className ="nav-link" href="/Register">Link</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
-      </li>
-    </ul>
-  </div>
-    </nav></div>);
 }
 
 export default TopNav;
