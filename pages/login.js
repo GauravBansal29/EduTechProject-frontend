@@ -1,29 +1,47 @@
-import {useRef, useState} from "react"
+import {useRef, useState , useContext} from "react"
 import Link from "next/link"
 import {toast, ToastContainer} from "react-toastify"
 import axios from "axios"
 import {SyncOutlined} from '@ant-design/icons'
+import {Context} from "../context"
+import {useRouter} from 'next/router'
 const Login= ()=>{
     const email= useRef(null);
     const password= useRef(null);
     const [loading , setLoading] = useState(false);
 
+    const router = useRouter();
+    //state
+    const {state, dispatch} =useContext(Context);
     const onSubmitHandler= async (e)=>{
         e.preventDefault();
         //post request 
         try{
             setLoading(true);
-            await axios.post(`${process.env.NEXT_PUBLIC_API}/login`, {
+           const res= await axios.post(`${process.env.NEXT_PUBLIC_API}/login`, {
                     email: email.current.value,
                     password: password.current.value
                 });
             setLoading(false);
+
+            // add to context the user data (jwt already sent to cookie)
+            dispatch({
+                type:"LOGIN",
+                payload: res.data
+            });
+            
+            //add to local-storage to prevent loss against page refresh
+           localStorage.setItem("user", JSON.stringify(res.data));
+
+           //redirect
+            router.push('/');
+
          }
          catch(err)
          {
              setLoading(false);
              console.log("Unsuccesful register"+ err);
-             toast(err.response.data);
+             toast("Unsuccessful login");
 
          }
 
