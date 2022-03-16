@@ -1,4 +1,4 @@
-import {useRef, useState , useContext} from "react"
+import {useRef, useState , useContext, useEffect} from "react"
 import Link from "next/link"
 import {toast, ToastContainer} from "react-toastify"
 import axios from "axios"
@@ -13,6 +13,11 @@ const Login= ()=>{
     const router = useRouter();
     //state
     const {state, dispatch} =useContext(Context);
+    const {user}= state;
+    //if logged in -redirect
+    useEffect(()=>{
+        if(user) router.push("/");
+    },[user])
     const onSubmitHandler= async (e)=>{
         e.preventDefault();
         //post request 
@@ -40,8 +45,12 @@ const Login= ()=>{
          catch(err)
          {
              setLoading(false);
-             console.log("Unsuccesful register"+ err);
-             toast("Unsuccessful login");
+             if(!err.response || err.response.status == 500) router.push("/err");
+             else{
+             console.log("Unsuccesful login"+ err);
+             toast(err.response.data);
+             }
+            
 
          }
 
