@@ -6,7 +6,6 @@ import {useRouter} from "next/router"
 import {Context} from "../context"
 import axios from "axios"
 
-
 const {Item} = Menu ;
 const TopNav= ()=>{
     
@@ -34,7 +33,7 @@ const TopNav= ()=>{
       process.browser && setCurrent(window.location.pathname);
     },[process.browser && window.location.pathname]);
     return (
-      <Menu  mode="horizontal" selectedKeys={[current]}>
+      <Menu  mode="horizontal" selectedKeys={[current]} className="shadow-sm mb-2" >
       <Item key="/" onClick={(e)=>{setCurrent(e.key)}}>
         <Link href="/"><a>Home</a></Link>
       </Item>
@@ -47,10 +46,27 @@ const TopNav= ()=>{
       <Link href="/register"><a>Register</a></Link>
       </Item>
       </>}
+ 
       
-     {user &&  <Item style={{ marginLeft: 'auto' }} onClick={onLogoutHandler}>
+     {user && 
+     <>
+     {user.role && user.role.includes("Instructor")? (
+          <Item key="/instructor/course/create" onClick={(e)=>{setCurrent(e.key)}}>
+            <Link href="/instructor/course/create"><a>Create Course</a></Link>
+          </Item>
+        ):
+        (
+          <Item key="/user/becomeInstructor" onClick={(e)=>{setCurrent(e.key)}}>
+            <Link href="/user/becomeInstructor"><a>Become Instructor</a></Link>
+          </Item>
+        )
+      }
+      <Item style={{ marginLeft: 'auto' }} onClick={onLogoutHandler}>
       Logout
-      </Item>}
+      </Item>
+      </>
+      
+      }
       </Menu>
       
   );
