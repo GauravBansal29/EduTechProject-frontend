@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from 'axios'
 import { useRouter } from "next/router";
+import InstructorNav from "../nav/InstructorNav";
 // to verify user else it will redirect to login
 const InstructorRoute= ({children})=>{
     const [hidden, setHidden] = useState(true);
@@ -34,7 +35,20 @@ const InstructorRoute= ({children})=>{
     },[])
 
     return (
-            !hidden ? (<>{children}</>): (<></>)
+            !hidden ? (
+            <div className="container-fluid">
+            <div className="row">
+            <div className="col-md-2">
+            <InstructorNav  />
+            </div>
+            <div className="col-md-9">
+            {children}
+            </div>
+            </div>
+            
+            
+            </div>)
+            : (<></>)
     );
 
 }

@@ -51,9 +51,15 @@ const TopNav= ()=>{
      {user && 
      <>
      {user.role && user.role.includes("Instructor")? (
+       <>
           <Item key="/instructor/course/create" onClick={(e)=>{setCurrent(e.key)}}>
             <Link href="/instructor/course/create"><a>Create Course</a></Link>
           </Item>
+          <Item key="/instructor" onClick={(e)=>{setCurrent(e.key)}}>
+          <Link href="/instructor"><a>Instructor</a></Link>
+          </Item>
+          </>
+          
         ):
         (
           <Item key="/user/becomeInstructor" onClick={(e)=>{setCurrent(e.key)}}>
@@ -61,6 +67,7 @@ const TopNav= ()=>{
           </Item>
         )
       }
+     
       <Item style={{ marginLeft: 'auto' }} onClick={onLogoutHandler}>
       Logout
       </Item>
