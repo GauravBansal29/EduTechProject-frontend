@@ -59,23 +59,25 @@ const Login= ()=>{
     return (
         <>
         <h1 className="bg-primary jumbotron text-white"> Login </h1>
-        <div className ="row">
-        <div className=" h-25 w-25 mh-auto col input-group m-3 bg-light">
-        <form onSubmit={onSubmitHandler} >
-        <div className="input-group mb-3 mx-auto">
+
+        <div className="p-3 my-auto mx-auto bg-light" style={{ width:'fit-content'}}>
+        <form onSubmit={onSubmitHandler} style={{width:'100%'}} >
+        <div className="form-group mb-3 mx-auto">
         <input  type="text" className="form-control" placeholder="Enter your email" ref={email} />
         </div>
         <div className="input-group mb-3 mx-auto">
-        <input type="password" className="form-control" placeholder="Enter your Password" ref={password} />
+        <input type="password" className="form-control w-30" placeholder="Enter your Password" ref={password} />
         </div>
-        <div className="input-group mb-3 mx-auto">
-        <button type="submit" className="form-control" disabled={loading}>{loading? <SyncOutlined spin/> : "SUBMIT"}</button>
+        <div className="input-group mb-3 mx-auto ">
+        <button type="submit" className="form-control w-10" disabled={loading}>{loading? <SyncOutlined spin/> : "SUBMIT"}</button>
         </div>
         </form>
-        <div className="row text-center">
-        Not Registered?
+        <div className="input-group mb-3 text-center mx-auto">
+        Not Registered?&nbsp;&nbsp;
          <Link href="/register"><a>Register</a></Link>
         </div>
+        <div className="input-group mb-3 text-center mx-auto">
+        <Link href="/forgot-password"><a>Forgot Password?</a></Link>
         </div>
         </div>
         </>
