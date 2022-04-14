@@ -1,7 +1,10 @@
 import { useState } from "react";
 import InstructorRoute from "../../../components/routes/InstructorRoute"
 import {Select, Button, Upload, message} from 'antd'
-import {SaveOutlined , LoadingOutlined, PlusOutlined, InfoCircleFilled} from '@ant-design/icons'
+import {SaveOutlined , LoadingOutlined, PlusOutlined, InfoCircleFilled, ConsoleSqlOutlined} from '@ant-design/icons'
+import axios from "axios";
+import { toast } from "react-toastify";
+import { Router, useRouter } from "next/router";
 const CreateCourse =()=>{
     const {Option}= Select ;
     const [values, setValues] =useState({
@@ -13,6 +16,41 @@ const CreateCourse =()=>{
         paid:false,
     })
     const [imgUrl, setImgUrl]= useState('');
+    const router = useRouter();
+    const onsubmitHandler= async (e)=>{
+        e.preventDefault();
+        //image upload 
+        try{
+            const imgres = await axios.post('/api/image-upload',{image: imgUrl});
+            if(imgres.status ===200) 
+            {
+                //imgUrl to be changed to aws url i believe 
+                try{
+                    await axios.post('api/create-course', 
+                    {
+                        name: values.name , 
+                        description: values.description ,
+                        price: (values.paid ? values.price : 0),
+                        image: imgUrl 
+                    });
+                    }
+               catch(err)
+               {
+                console.log(err);
+                toast("Form Submission unsuccessful");
+                router.push('/err');
+               }
+                
+            }
+        }
+        catch(err)
+        {
+            console.log(err);
+            toast("Form Submission unsuccessful");
+            router.push('/err');
+        }
+    }
+
     const handleChange= (e)=>{
         setValues({...values , [e.target.name]: e.target.value})
     }
@@ -48,9 +86,39 @@ const CreateCourse =()=>{
         }
 
     }
-    const handleSubmit=(e)=>{
+    const handleSubmit=async (e)=>{
         e.preventDefault();
-        console.log("Submit called");
+        //image upload 
+        try{
+            const imgres = await axios.post('/api/image-upload',{image: imgUrl});
+            console.log(imgres.data);
+            if(imgres.status ===200) 
+            {
+                //imgUrl to be changed to aws url i believe 
+                try{
+                    await axios.post('/api/create-course', 
+                    {
+                        name: values.name , 
+                        description: values.description ,
+                        price: (values.paid ? values.price : 0),
+                        image: imgUrl 
+                    });
+                }
+               catch(err)
+               {
+                console.log(err);
+                toast("Form Submission unsuccessful");
+                router.push('/err');
+               }
+                
+            }
+        }
+        catch(err)
+        {
+            console.log(err);
+            toast("Form Submission unsuccessful");
+            router.push('/err');
+        }
     }
     const uploadButton = (
         <div>
@@ -59,10 +127,12 @@ const CreateCourse =()=>{
         </div>
     );
 
+  
+
     return (
         <InstructorRoute>
         <h1 className="jumbotron text-center">Create Course</h1>
-        <form>
+        <form onSubmit={onsubmitHandler}>
         <div className="form-group">
         <div className="form-row pt-3">
         <input type="text" name="name" className="form-control" placeholder="Course Name" value={values.name} onChange={handleChange} />
