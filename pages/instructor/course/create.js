@@ -1,10 +1,13 @@
 import { useState } from "react";
 import InstructorRoute from "../../../components/routes/InstructorRoute"
 import {Select, Button, Upload, message} from 'antd'
-import {SaveOutlined , LoadingOutlined, PlusOutlined, InfoCircleFilled, ConsoleSqlOutlined} from '@ant-design/icons'
+import {SaveOutlined , LoadingOutlined, PlusOutlined, InfoCircleFilled, ConsoleSqlOutlined, WindowsFilled} from '@ant-design/icons'
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Router, useRouter } from "next/router";
+import Resizer from "react-image-file-resizer";
+import { removeListener } from "process";
+
 const CreateCourse =()=>{
     const {Option}= Select ;
     const [values, setValues] =useState({
@@ -17,29 +20,62 @@ const CreateCourse =()=>{
     })
     const [imgUrl, setImgUrl]= useState('');
     const router = useRouter();
+    const resizeImage = (base64Str, maxWidth = 400, maxHeight = 350) => {
+        return new Promise((resolve) => {
+          let img = new Image()
+          img.src = base64Str
+          img.onload = () => {
+            let canvas = document.createElement('canvas')
+            const MAX_WIDTH = maxWidth
+            const MAX_HEIGHT = maxHeight
+            let width = img.width
+            let height = img.height
+      
+            if (width > height) {
+              if (width > MAX_WIDTH) {
+                height *= MAX_WIDTH / width
+                width = MAX_WIDTH
+              }
+            } else {
+              if (height > MAX_HEIGHT) {
+                width *= MAX_HEIGHT / height
+                height = MAX_HEIGHT
+              }
+            }
+            canvas.width = width
+            canvas.height = height
+            let ctx = canvas.getContext('2d')
+            ctx.drawImage(img, 0, 0, width, height)
+            resolve(canvas.toDataURL())
+          }
+        })
+      }
     const onsubmitHandler= async (e)=>{
         e.preventDefault();
         //image upload 
         try{
-            const imgres = await axios.post('/api/image-upload',{image: imgUrl});
+            const result = await resizeImage(imgUrl, 720, 500);
+            const imgres = await axios.post('/api/image-upload',{image: result});
             if(imgres.status ===200) 
             {
                 //imgUrl to be changed to aws url i believe 
                 try{
-                    await axios.post('api/create-course', 
+                    const res= await axios.post('/api/create-course', 
                     {
                         name: values.name , 
                         description: values.description ,
                         price: (values.paid ? values.price : 0),
-                        image: imgUrl 
+                        image: result,
+                        paid: values.paid
                     });
+
                     }
-               catch(err)
-               {
-                console.log(err);
-                toast("Form Submission unsuccessful");
-                router.push('/err');
-               }
+                catch(err)
+                {
+                    console.log(err);
+                    toast("Form Submission unsuccessful");
+                    router.push('/err');
+                }
                 
             }
         }
@@ -96,13 +132,26 @@ const CreateCourse =()=>{
             {
                 //imgUrl to be changed to aws url i believe 
                 try{
-                    await axios.post('/api/create-course', 
+                    const res= await axios.post('/api/create-course', 
                     {
                         name: values.name , 
                         description: values.description ,
                         price: (values.paid ? values.price : 0),
                         image: imgUrl 
                     });
+                    if(res.status== 205){
+                        toast("The title is already taken. Try Again");
+                        setInterval(()=>{
+                            router.reload(window.location.pathname);
+                        }, 4000);
+                        
+                    }
+                    if(res.status== 200) 
+                    {
+                        toast(<><div>Course created successfully</div><div>You can start adding lectures now</div></>);
+                        
+                        router.push('/instructor');
+                    }
                 }
                catch(err)
                {
