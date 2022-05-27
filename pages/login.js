@@ -27,6 +27,7 @@ const Login= ()=>{
                     email: email.current.value,
                     password: password.current.value
                 });
+                console.log(res);
             setLoading(false);
 
             // add to context the user data (jwt already sent to cookie)
@@ -44,17 +45,19 @@ const Login= ()=>{
          }
          catch(err)
          {
+             console.log("entered error block");
+             console.log(err);
              setLoading(false);
              if(!err.response || err.response.status == 500) router.push("/err");
              else{
              console.log("Unsuccesful login"+ err);
              toast(err.response.data);
-             }
-            
-
+             email.current.value="";
+             password.current.value="";
          }
 
     }
+}
 
     return (
         <>

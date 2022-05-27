@@ -38,7 +38,7 @@ const InstructorRoute= ({children})=>{
             !hidden ? (
             <div className="container-fluid">
             <div className="row">
-            <div className="col-md-2">
+            <div className="col-md-2" >
             <InstructorNav  />
             </div>
             <div className="col-md-9">

@@ -20,36 +20,36 @@ const CreateCourse =()=>{
     })
     const [imgUrl, setImgUrl]= useState('');
     const router = useRouter();
-    const resizeImage = (base64Str, maxWidth = 400, maxHeight = 350) => {
-        return new Promise((resolve) => {
-          let img = new Image()
-          img.src = base64Str
-          img.onload = () => {
-            let canvas = document.createElement('canvas')
-            const MAX_WIDTH = maxWidth
-            const MAX_HEIGHT = maxHeight
-            let width = img.width
-            let height = img.height
+    // const resizeImage = (base64Str, maxWidth = 400, maxHeight = 350) => {
+    //     return new Promise((resolve) => {
+    //       let img = new Image()
+    //       img.src = base64Str
+    //       img.onload = () => {
+    //         let canvas = document.createElement('canvas')
+    //         const MAX_WIDTH = maxWidth
+    //         const MAX_HEIGHT = maxHeight
+    //         let width = img.width
+    //         let height = img.height
       
-            if (width > height) {
-              if (width > MAX_WIDTH) {
-                height *= MAX_WIDTH / width
-                width = MAX_WIDTH
-              }
-            } else {
-              if (height > MAX_HEIGHT) {
-                width *= MAX_HEIGHT / height
-                height = MAX_HEIGHT
-              }
-            }
-            canvas.width = width
-            canvas.height = height
-            let ctx = canvas.getContext('2d')
-            ctx.drawImage(img, 0, 0, width, height)
-            resolve(canvas.toDataURL())
-          }
-        })
-      }
+    //         if (width > height) {
+    //           if (width > MAX_WIDTH) {
+    //             height *= MAX_WIDTH / width
+    //             width = MAX_WIDTH
+    //           }
+    //         } else {
+    //           if (height > MAX_HEIGHT) {
+    //             width *= MAX_HEIGHT / height
+    //             height = MAX_HEIGHT
+    //           }
+    //         }
+    //         canvas.width = width
+    //         canvas.height = height
+    //         let ctx = canvas.getContext('2d')
+    //         ctx.drawImage(img, 0, 0, width, height)
+    //         resolve(canvas.toDataURL())
+    //       }
+    //     })
+    //   }
     const onsubmitHandler= async (e)=>{
         e.preventDefault();
         //image upload 
@@ -126,10 +126,12 @@ const CreateCourse =()=>{
         e.preventDefault();
         //image upload 
         try{
+            //const result = await resizeImage(imgUrl, 720, 500);
             const imgres = await axios.post('/api/image-upload',{image: imgUrl});
             console.log(imgres.data);
             if(imgres.status ===200) 
             {
+                console.log(imgres.data.Location);
                 //imgUrl to be changed to aws url i believe 
                 try{
                     const res= await axios.post('/api/create-course', 
@@ -137,7 +139,7 @@ const CreateCourse =()=>{
                         name: values.name , 
                         description: values.description ,
                         price: (values.paid ? values.price : 0),
-                        image: imgUrl 
+                        image: imgres.data.Location
                     });
                     if(res.status== 205){
                         toast("The title is already taken. Try Again");
