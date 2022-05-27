@@ -29,7 +29,7 @@ const InstructorIndex= ()=>{
     },[])
     return(
         <InstructorRoute>
-        <div style={{backgroundColor:"#F5F5F5"}} >
+        <div>
         <h1 className="jumbotron text-center square">INSTRUCTOR DASHBOARD</h1>
         
             <div className="container" style={{marginLeft:"2.5rem"}}>

@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef} from 'react'
 import {useRouter} from 'next/router'
 import InstructorRoute from '../../../../components/routes/InstructorRoute'
 import axios from 'axios';
@@ -12,6 +12,10 @@ const CourseView= ()=>{
     const [modalvisible , setModalvisible]= useState(false);
     const router= useRouter();
     const {slug}= router.query;  // to get the parameter of course
+    const [videofilename, setVideofilename]=useState('Upload Video');
+    const lessontitle= useRef();
+    const lessondesc= useRef();
+    const lessonlink= useRef();
 
     useEffect(()=>{
         // get the course details from the slug
@@ -35,6 +39,18 @@ const CourseView= ()=>{
     }
     const editoptions =()=>{
 
+    }
+    const videouploadHandler=(e)=>{
+        const file= e.target.files[0];
+        setVideofilename(file.name);
+    }
+    const addLessonHandler=()=>{
+        console.log("Hello");
+        setModalvisible(false);
+        lessontitle.current.value="";
+        lessondesc.current.value="";
+        lessonlink.current.value="";
+        
     }
     return (
         <InstructorRoute>
@@ -75,8 +91,38 @@ const CourseView= ()=>{
                     onClick= {()=>{setModalvisible(true)}}>
                 Add Lesson
                 </Button>
-                <Modal title="ADD LESSON" visible={modalvisible} onCancel={()=>{setModalvisible(false);}} onOk={()=>{setModalvisible(false)}}>
-                hello world
+
+                {/* lesson modal start */}
+                <Modal title="ADD LESSON" visible={modalvisible} onCancel={()=>{setModalvisible(false);}} footer={null}>
+                <form>
+                <input 
+                    type="text" 
+                    className="form-control square" 
+                    placeholder="title"
+                    ref={lessontitle} 
+                    autofocus
+                    required />
+                <textarea
+                    placeholder='Description'
+                    className='form-control mt-3'
+                    rows="7"
+                    cols="7"
+                    ref={lessondesc}
+                    autofocus
+                    required />
+                <label className='w-100 btn text-start mt-3' style={{color:"#ffffff" , fontWeight:"400",backgroundColor: "#dddddd"}}>
+                {videofilename}
+                <input type="file" accept="video/*" hidden onChange={videouploadHandler} />
+                </label>
+                <Button 
+                    type="primary" 
+                    className={"mt-2 col-md-6 offset-md-3 text-center"} 
+                    shape="round" 
+                    onClick= {addLessonHandler}>
+                Submit
+                </Button>
+                </form>
+
                 </Modal>
                 </div>
                 </>
