@@ -110,7 +110,7 @@ const CreateCourse =()=>{
                         name: values.name , 
                         description: values.description ,
                         price: (values.paid ? values.price : 0),
-                        image: imgres.data.Location
+                        image: imgres.data
                     });
                     if(res.status== 205){
                         toast("The title is already taken. Try Again");

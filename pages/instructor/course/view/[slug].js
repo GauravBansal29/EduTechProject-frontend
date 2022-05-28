@@ -124,7 +124,7 @@ const CourseView= ()=>{
                 <div style={{width:"fit-content"}}>
                 <Avatar 
                     size={120}
-                    src= {course.image ? course.image : "/course.png"}
+                    src= {course.image ? course.image.Location : "/course.png"}
                     shape= "square"
                     className='media-object'
                 />

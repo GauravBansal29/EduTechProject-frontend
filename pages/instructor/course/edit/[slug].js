@@ -10,6 +10,7 @@ import Resizer from "react-image-file-resizer";
 import { removeListener } from "process";
 
 const EditCourse = ()=>{
+    const [imgobj , setImgobj] = useState({});
     const router = useRouter();
     const {slug}= router.query;
     const {Option}= Select ;
@@ -26,6 +27,7 @@ const EditCourse = ()=>{
 
     useEffect(()=>{
         const loadstoredData= async()=>{
+            if(!router.isReady) return;
             try{
             const {data}= await axios.get(`/api/course/${slug}`);
             setValues(()=>{
@@ -40,6 +42,7 @@ const EditCourse = ()=>{
                 
             });
             setImgUrl(data.image.Location);
+            setImgobj(data.image);
             }
             catch(err)
             {
@@ -51,7 +54,7 @@ const EditCourse = ()=>{
 
         }
         loadstoredData();
-    }, [])
+    }, [router.isReady])
 
     const onsubmitHandler= async (e)=>{
         e.preventDefault();
@@ -131,7 +134,15 @@ const EditCourse = ()=>{
         try{
             //const result = await resizeImage(imgUrl, 720, 500);
             /////////////////DELETE IMAGE FROM S3 IF CHANGE ELSE DONT CREATE NEW///////////////////////////////
+
             // if change in image url then we need to delete the previous image from s3 first and then add this one else it will act as bug to populate our database 
+            if(imgobj && (imgobj.Location != imgUrl))
+            {
+                // changes have been made to the image container
+                const imgdel= await axios.post('/api/image-delete', {image:imgobj});
+
+            }
+           
             const imgres = await axios.post('/api/image-upload',{image: imgUrl});
             console.log(imgres.data);
             if(imgres.status ===200) 
@@ -139,12 +150,12 @@ const EditCourse = ()=>{
                 console.log(imgres.data.Location);
                 //imgUrl to be changed to aws url i believe 
                 try{
-                    const res= await axios.post(`/api/update-course/${slug}`, 
+                    const res= await axios.put(`/api/update-course/${slug}`, 
                     {
                         name: values.name , 
                         description: values.description ,
                         price: (values.paid ? values.price : 0),
-                        image: imgres.data.Location
+                        image: imgres.data
                     });
                     if(res.status== 205){
                         toast("The title is already taken. Try Again");
