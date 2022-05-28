@@ -1,5 +1,6 @@
-import { useState } from "react";
-import InstructorRoute from "../../../components/routes/InstructorRoute"
+
+import InstructorRoute from '../../../../components/routes/InstructorRoute'
+import { useState , useEffect} from "react";
 import {Select, Button, Upload, message} from 'antd'
 import {SaveOutlined , LoadingOutlined, PlusOutlined, InfoCircleFilled, ConsoleSqlOutlined, WindowsFilled} from '@ant-design/icons'
 import axios from "axios";
@@ -8,7 +9,9 @@ import { Router, useRouter } from "next/router";
 import Resizer from "react-image-file-resizer";
 import { removeListener } from "process";
 
-const CreateCourse =()=>{
+const EditCourse = ()=>{
+    const router = useRouter();
+    const {slug}= router.query;
     const {Option}= Select ;
     const [values, setValues] =useState({
         name:'',
@@ -17,9 +20,38 @@ const CreateCourse =()=>{
         loading:false,
         uploading: false,
         paid:false,
-    })
+    });
+
     const [imgUrl, setImgUrl]= useState('');
-    const router = useRouter();
+
+    useEffect(()=>{
+        const loadstoredData= async()=>{
+            try{
+            const {data}= await axios.get(`/api/course/${slug}`);
+            setValues(()=>{
+                return (
+                {
+                    name:data.name,
+                    description: data.description,
+                    price: data.price,
+                    paid: data.paid
+                }
+                );
+                
+            });
+            setImgUrl(data.image.Location);
+            }
+            catch(err)
+            {
+                console.log(err);
+                toast("Something went wrong");
+                router.push('/err');
+            }
+
+
+        }
+        loadstoredData();
+    }, [])
 
     const onsubmitHandler= async (e)=>{
         e.preventDefault();
@@ -98,6 +130,8 @@ const CreateCourse =()=>{
         //image upload 
         try{
             //const result = await resizeImage(imgUrl, 720, 500);
+            /////////////////DELETE IMAGE FROM S3 IF CHANGE ELSE DONT CREATE NEW///////////////////////////////
+            // if change in image url then we need to delete the previous image from s3 first and then add this one else it will act as bug to populate our database 
             const imgres = await axios.post('/api/image-upload',{image: imgUrl});
             console.log(imgres.data);
             if(imgres.status ===200) 
@@ -105,7 +139,7 @@ const CreateCourse =()=>{
                 console.log(imgres.data.Location);
                 //imgUrl to be changed to aws url i believe 
                 try{
-                    const res= await axios.post('/api/create-course', 
+                    const res= await axios.post(`/api/update-course/${slug}`, 
                     {
                         name: values.name , 
                         description: values.description ,
@@ -121,7 +155,7 @@ const CreateCourse =()=>{
                     }
                     if(res.status== 200) 
                     {
-                        toast(<><div>Course created successfully</div><div>You can start adding lectures now</div></>);
+                        toast("Course updated successfully");
                         
                         router.push('/instructor');
                     }
@@ -148,13 +182,11 @@ const CreateCourse =()=>{
           <div style={{ marginTop: 8 }}>Upload</div>
         </div>
     );
-
-  
-
-    return (
+   
+    return(
         <InstructorRoute>
-        <h1 className="jumbotron text-center">Create Course</h1>
-        <form onSubmit={onsubmitHandler}>
+         <h1 className="jumbotron text-center">Edit Course</h1>
+        <form>
         <div className="form-group">
         <div className="form-row pt-3">
         <input type="text" name="name" className="form-control" placeholder="Course Name" value={values.name} onChange={handleChange} />
@@ -206,6 +238,9 @@ const CreateCourse =()=>{
         </div>
         </form>
         </InstructorRoute>
-    )
+
+    );
+
 }
-export default CreateCourse;
+
+export default EditCourse ;

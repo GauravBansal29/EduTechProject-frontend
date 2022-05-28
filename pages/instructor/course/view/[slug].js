@@ -3,10 +3,9 @@ import {useRouter} from 'next/router'
 import InstructorRoute from '../../../../components/routes/InstructorRoute'
 import axios from 'axios';
 import {toast} from 'react-toastify'
-import {Avatar, Button, Modal, List, Form} from 'antd'
+import {Avatar, Button, Modal, List, Form, Tooltip} from 'antd'
 import {EditOutlined, CheckOutlined, PlusOutlined, CloseOutlined} from '@ant-design/icons'
 import ReactMarkdown from 'react-markdown'
-
 
 
 const CourseView= ()=>{
@@ -22,22 +21,6 @@ const CourseView= ()=>{
     const [uploading, setUploading]= useState(false);
     const [uploaded , setUploaded] =useState(false);
     const [courselength, setCourselength]= useState('');
-    ///////////////////////////////////////
-    const mydata = [
-        {
-          title: 'Ant Design Title 1',
-        },
-        {
-          title: 'Ant Design Title 2',
-        },
-        {
-          title: 'Ant Design Title 3',
-        },
-        {
-          title: 'Ant Design Title 4',
-        },
-      ];
-    ////////////////////////////////////////////
     useEffect(()=>{
         // get the course details from the slug
         const getCourse= async ()=>{
@@ -63,7 +46,7 @@ const CourseView= ()=>{
 
     }
     const editoptions =()=>{
-
+        router.push(`/instructor/course/edit/${slug}`);
     }
     const videouploadHandler=async (e)=>{
         // upload video to S3   
@@ -152,11 +135,15 @@ const CourseView= ()=>{
                 <p><ReactMarkdown>{course.description}</ReactMarkdown></p>
                 </div>
                 <div className="col mr-0">
-                <div className='row mb-3' onclick={editoptions} >
+                <div className='row mb-3' onClick={editoptions} >
+                <Tooltip placement="topRight" title="Edit" arrowPointAtCenter>
                 <EditOutlined style={{fontSize:"1.2rem", color:"#999999"}}/>
+                </Tooltip>
                 </div>
-                <div className='row' onclick={publish}>
+                <div className='row' onClick={publish}>
+                <Tooltip placement="bottomRight" title="Publish" arrowPointAtCenter>
                 <CheckOutlined style={{fontSize:"1.2rem", color:"#999999"}} />
+                </Tooltip>
                 </div>
                 </div>
                 </div>
