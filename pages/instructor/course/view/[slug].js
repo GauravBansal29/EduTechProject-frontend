@@ -3,13 +3,14 @@ import {useRouter} from 'next/router'
 import InstructorRoute from '../../../../components/routes/InstructorRoute'
 import axios from 'axios';
 import {toast} from 'react-toastify'
-import {Avatar, Button, Modal, List} from 'antd'
+import {Avatar, Button, Modal, List, Form} from 'antd'
 import {EditOutlined, CheckOutlined, PlusOutlined, CloseOutlined} from '@ant-design/icons'
 import ReactMarkdown from 'react-markdown'
-import Item from 'antd/lib/list/Item';
+
+
 
 const CourseView= ()=>{
-
+    const {Item}= Form;
     const [course, setCourse]= useState({});
     const [modalvisible , setModalvisible]= useState(false);
     const router= useRouter();
@@ -21,9 +22,26 @@ const CourseView= ()=>{
     const [uploading, setUploading]= useState(false);
     const [uploaded , setUploaded] =useState(false);
     const [courselength, setCourselength]= useState('');
+    ///////////////////////////////////////
+    const mydata = [
+        {
+          title: 'Ant Design Title 1',
+        },
+        {
+          title: 'Ant Design Title 2',
+        },
+        {
+          title: 'Ant Design Title 3',
+        },
+        {
+          title: 'Ant Design Title 4',
+        },
+      ];
+    ////////////////////////////////////////////
     useEffect(()=>{
         // get the course details from the slug
         const getCourse= async ()=>{
+            if(!router.isReady) return;
             try{
             const res= await axios.get(`/api/course/${slug}`);
             setCourse(res.data);
@@ -40,7 +58,7 @@ const CourseView= ()=>{
 
         }
         getCourse();
-    },[])
+    },[router.isReady])
     const publish=()=>{
 
     }
@@ -94,7 +112,11 @@ const CourseView= ()=>{
                 description: lessondesc.current.value ,
                 videolink: lessonlink
             });
+            setCourse(()=>{
+                return {...course, lessons:[...course.lessons, {title: lessontitle.current.value , description: lessondesc.current.value, videolink: lessonlink}]}
+            })
             toast("Successfully added new lesson");
+            
         }
         catch(err)
         {
@@ -190,17 +212,20 @@ const CourseView= ()=>{
                 <div className="row pb-5">
                 <div className="col lesson-list">
                 <h5>{courselength} lessons</h5>
-                <List itemLayout='horizontal' datasource={course && course.lessons} renderItem={
-                    (item, index)=>{
-                        {console.log(item, index)}
-                        <Item>
-                        <Item.Meta 
-                        avatar={<Avatar>{index +1}</Avatar>}
-                        title={item.title}></Item.Meta>
-                        </Item>
-                    }
-                }>
-                </List>
+                {/* <h5>{JSON.stringify(course.lessons, null, 2)}</h5>  */}
+                <List
+                 itemLayout="horizontal"
+                dataSource={course.lessons}
+                renderItem={(item, index) => (
+                 <List.Item>
+                 <List.Item.Meta
+                 avatar={<Avatar shape='square'>{index+1}</Avatar>}
+                title={<a href="https://ant.design">{item.title}</a>}
+                description={item.content}
+                />
+      </List.Item>
+    )}
+  />
                 </div>
                 </div>
                 </>
