@@ -1,13 +1,12 @@
 
 import InstructorRoute from '../../../../components/routes/InstructorRoute'
 import { useState , useEffect} from "react";
-import {Select, Button, Upload, message} from 'antd'
+import {Select, Button, Upload, message, Avatar,List} from 'antd'
 import {SaveOutlined , LoadingOutlined, PlusOutlined, InfoCircleFilled, ConsoleSqlOutlined, WindowsFilled} from '@ant-design/icons'
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Router, useRouter } from "next/router";
-import Resizer from "react-image-file-resizer";
-import { removeListener } from "process";
+
 
 const EditCourse = ()=>{
     const [imgobj , setImgobj] = useState({});
@@ -21,6 +20,7 @@ const EditCourse = ()=>{
         loading:false,
         uploading: false,
         paid:false,
+        lessons:[]
     });
 
     const [imgUrl, setImgUrl]= useState('');
@@ -36,7 +36,8 @@ const EditCourse = ()=>{
                     name:data.name,
                     description: data.description,
                     price: data.price,
-                    paid: data.paid
+                    paid: data.paid,
+                    lessons: data.lessons
                 }
                 );
                 
@@ -136,18 +137,21 @@ const EditCourse = ()=>{
             /////////////////DELETE IMAGE FROM S3 IF CHANGE ELSE DONT CREATE NEW///////////////////////////////
 
             // if change in image url then we need to delete the previous image from s3 first and then add this one else it will act as bug to populate our database 
+            let change= false;
             if(imgobj && (imgobj.Location != imgUrl))
             {
                 // changes have been made to the image container
                 const imgdel= await axios.post('/api/image-delete', {image:imgobj});
+                change=true;
 
             }
-           
-            const imgres = await axios.post('/api/image-upload',{image: imgUrl});
-            console.log(imgres.data);
-            if(imgres.status ===200) 
+            let imgres;
+            if(change)
             {
-                console.log(imgres.data.Location);
+                imgres = await axios.post('/api/image-upload',{image: imgUrl});
+            }
+            if(!change || imgres.status ===200) 
+            {
                 //imgUrl to be changed to aws url i believe 
                 try{
                     const res= await axios.put(`/api/update-course/${slug}`, 
@@ -155,7 +159,7 @@ const EditCourse = ()=>{
                         name: values.name , 
                         description: values.description ,
                         price: (values.paid ? values.price : 0),
-                        image: imgres.data
+                        image: change? imgres.data: imgobj
                     });
                     if(res.status== 205){
                         toast("The title is already taken. Try Again");
@@ -248,6 +252,23 @@ const EditCourse = ()=>{
         </div>
         </div>
         </form>
+        <div className="row pb-5">
+            <div className="col lesson-list">
+            <h5>{values.lessons.length} lessons</h5>
+            
+            <List
+             itemLayout="horizontal"
+             dataSource={values.lessons}
+             renderItem={(item, index) => (
+             <List.Item>
+             <List.Item.Meta
+                avatar={<Avatar shape='square'>{index+1}</Avatar>}
+                title={<a href="https://ant.design">{item.title}</a>}
+                description={item.content}
+                />
+              </List.Item>)} />
+            </div>
+            </div>
         </InstructorRoute>
 
     );

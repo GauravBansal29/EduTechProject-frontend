@@ -9,7 +9,6 @@ import ReactMarkdown from 'react-markdown'
 
 
 const CourseView= ()=>{
-    const {Item}= Form;
     const [course, setCourse]= useState({});
     const [modalvisible , setModalvisible]= useState(false);
     const router= useRouter();
@@ -95,9 +94,11 @@ const CourseView= ()=>{
                 description: lessondesc.current.value ,
                 videolink: lessonlink
             });
+            console.log(lessondesc.current.value);
             setCourse(()=>{
-                return {...course, lessons:[...course.lessons, {title: lessontitle.current.value , description: lessondesc.current.value, videolink: lessonlink}]}
+                return {...course, lessons:[...course.lessons, {title: lessontitle.current.value , content: lessondesc.current.value , videolink: lessonlink}]}
             })
+            setVideofilename("Upload Video");
             toast("Successfully added new lesson");
             
         }
