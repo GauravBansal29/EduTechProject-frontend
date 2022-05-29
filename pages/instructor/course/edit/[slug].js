@@ -1,11 +1,13 @@
 
 import InstructorRoute from '../../../../components/routes/InstructorRoute'
 import { useState , useEffect} from "react";
-import {Select, Button, Upload, message, Avatar,List} from 'antd'
-import {SaveOutlined , LoadingOutlined, PlusOutlined, InfoCircleFilled, ConsoleSqlOutlined, WindowsFilled} from '@ant-design/icons'
+import {Select, Button, Upload, message, Avatar,List, Tooltip, Popconfirm} from 'antd'
+import { LoadingOutlined, PlusOutlined, DeleteOutlined, EditOutlined, WindowsFilled} from '@ant-design/icons'
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Router, useRouter } from "next/router";
+import Link from 'next/link'
+import slugify from 'slugify'
 
 
 const EditCourse = ()=>{
@@ -159,7 +161,8 @@ const EditCourse = ()=>{
                         name: values.name , 
                         description: values.description ,
                         price: (values.paid ? values.price : 0),
-                        image: change? imgres.data: imgobj
+                        image: change? imgres.data: imgobj,
+                        lessons: values.lessons 
                     });
                     if(res.status== 205){
                         toast("The title is already taken. Try Again");
@@ -170,9 +173,8 @@ const EditCourse = ()=>{
                     }
                     if(res.status== 200) 
                     {
-                        toast("Course updated successfully");
-                        
-                        router.push('/instructor');
+                        toast("Course details updated successfully");
+                        router.push(`/instructor/course/edit/${slugify(values.name.toLowerCase())}`)
                     }
                 }
                catch(err)
@@ -197,10 +199,63 @@ const EditCourse = ()=>{
           <div style={{ marginTop: 8 }}>Upload</div>
         </div>
     );
-   
+
+    const handleDrag= (e, index)=>{
+        console.log(index);
+        e.dataTransfer.setData("itemIndex", index);
+    }
+   const handleDrop=async (e, index)=>{
+       
+       console.log(index);
+       const movingItemIndex= e.dataTransfer.getData("itemIndex");
+       const targetItemIndex= index;
+
+       let alllessons=  values.lessons;
+       let moveditem= alllessons[movingItemIndex];
+       alllessons.splice(movingItemIndex, 1); // removed the moving item index
+       alllessons.splice(targetItemIndex, 0, moveditem); // 0 removed and 1 pushed to this index
+        console.log(alllessons);
+       setValues(()=>{
+           return {...values, lessons: [...alllessons]};
+       });
+
+       await axios.put(`/api/update-course-lessons/${slug}`, {lessons: values.lessons});
+        toast("Lesson order updated");
+
+        
+   }
+
+   const handleDelete= async(index)=>{
+       console.log(index);
+       const tindex= index;
+       const ans= window.confirm("Do you want to delete this lesson?");
+       if(!ans) return;
+       let alllessons= values.lessons;
+       let dellesson= alllessons[tindex];
+       console.log(tindex);
+       alllessons.splice(tindex, 1);
+       setValues(()=>{
+           return {...values , lessons:alllessons};
+       });
+       console.log(dellesson);
+       try{
+        await axios.put(`/api/update-course-lessons/${slug}`, {lessons: values.lessons}); // update lessons of course
+        // we need to delete the video from aws and lesson from lesson modal
+       await axios.post('/api/course/remove-video',{video: dellesson.videolink});
+
+       await axios.delete(`/api/delete-lesson/${dellesson._id}`);
+
+       }
+       catch(err)
+       {
+        console.log(err);
+        router.push('/err');
+       }
+   }    
     return(
         <InstructorRoute>
-         <h1 className="jumbotron text-center">Edit Course</h1>
+        <Link href={`/instructor/course/view/${slug}`}><div className="text-end" style={{fontWeight:"400"}}><a> Go back to course view &#8594; </a></div></Link>
+         <h6>Course Description</h6>
         <form>
         <div className="form-group">
         <div className="form-row pt-3">
@@ -245,27 +300,33 @@ const EditCourse = ()=>{
 
         <div className="form-row pt-3">
         <div className="col">
-        <Button onClick={handleSubmit}  disabled={values.uploading || values.loading}  className="btn btn-primary" icon={<SaveOutlined/>} >
-        {values.uploading? "Saving...." : "Save and Continue"}
+        <Button onClick={handleSubmit}  disabled={values.uploading || values.loading}  className="btn btn-primary">
+        {values.uploading? "Saving...." : "Update course details"}
         </Button>
         </div>
         </div>
         </div>
         </form>
+        <br></br>
         <div className="row pb-5">
             <div className="col lesson-list">
-            <h5>{values.lessons.length} lessons</h5>
-            
+            <h6>Lessons</h6>
             <List
+             onDragOver= {e=>e.preventDefault()}
              itemLayout="horizontal"
              dataSource={values.lessons}
              renderItem={(item, index) => (
-             <List.Item>
+             <List.Item
+               draggable
+               onDragStart={e=>handleDrag(e, index)}
+               onDrop={e=>handleDrop(e, index)}>
              <List.Item.Meta
                 avatar={<Avatar shape='square'>{index+1}</Avatar>}
                 title={<a href="https://ant.design">{item.title}</a>}
                 description={item.content}
                 />
+            <Tooltip placement="topRight" title="Edit Lesson" arrowPointAtCenter><EditOutlined className="float-right me-4" style={{color:"#777777"}}/></Tooltip>
+            <Tooltip placement="topRight" title="Delete Lesson" arrowPointAtCenter> <DeleteOutlined  onClick={()=>{handleDelete(index)}} className="float-right" style={{color:"#777777"}}/> </Tooltip>
               </List.Item>)} />
             </div>
             </div>
