@@ -4,7 +4,7 @@ import InstructorRoute from '../../../../components/routes/InstructorRoute'
 import axios from 'axios';
 import {toast} from 'react-toastify'
 import {Avatar, Button, Modal, List, Form, Tooltip,Switch} from 'antd'
-import {EditOutlined, CheckOutlined, PlusOutlined, CloseOutlined} from '@ant-design/icons'
+import {EditOutlined, CheckOutlined, PlusOutlined, CloseOutlined, FileAddOutlined, FileDoneOutlined, FileExcelOutlined, FileExclamationOutlined} from '@ant-design/icons'
 import ReactMarkdown from 'react-markdown'
 import ReactPlayer from 'react-player'
 
@@ -43,9 +43,7 @@ const CourseView= ()=>{
         }
         getCourse();
     },[router.isReady])
-    const publish=()=>{
 
-    }
     const editoptions =()=>{
         router.push(`/instructor/course/edit/${slug}`);
     }
@@ -118,6 +116,38 @@ const CourseView= ()=>{
             return prev+1;
         })
     }
+    const handlePublish=async ()=>{
+        try{
+        const ans= window.confirm("Are you sure you want to publish the course? \nWarning: Once your course has users you wont be able to unpublish");
+        if(!ans) return;
+        const {data}=await axios.put(`/api/course/publish/${slug}`);
+        setCourse(()=>{
+            return {...course, published: true};
+        })
+        }
+        catch(err)
+        {
+            console.log(err);
+            toast("Some error occured");
+            router.push('/err');
+        }
+    }
+    const handleUnpublish= async ()=>{
+        try{
+        const ans= window.confirm("Are you sure you want to unpublish the course?");
+        if(!ans) return;
+        const {data}= await axios.put(`/api/course/unpublish/${slug}`);
+        setCourse(()=>{
+            return {...course, published: false};
+        })
+        }
+        catch(err)
+        {
+            console.log(err);
+            toast("Some error occured");
+            router.push('/err');
+        }
+    }
     return (
         <InstructorRoute>
           <div className="container-fluid pt-3">
@@ -144,10 +174,36 @@ const CourseView= ()=>{
                 <EditOutlined style={{fontSize:"1.2rem", color:"#999999"}}/>
                 </Tooltip>
                 </div>
-                <div className='row' onClick={publish}>
-                <Tooltip placement="bottomRight" title="Publish" arrowPointAtCenter>
-                <CheckOutlined style={{fontSize:"1.2rem", color:"#999999"}} />
-                </Tooltip>
+                <div className='row' >
+                {
+                    (course.lessons && course.lessons.length< 5)? 
+                    (
+                    <Tooltip placement="bottomRight" title="Need atleast 4 lessons to publish" arrowPointAtCenter>
+                    <FileExclamationOutlined style={{fontSize:"1.2rem", color:"#999999"}}/>
+                    </Tooltip>
+                    ):
+                    (
+                    course.published?
+                    (
+                        (course.users==0)?
+                        (
+                     <Tooltip placement="bottomRight" title="Unpublish Course" arrowPointAtCenter>
+                    <FileExcelOutlined  onClick={handleUnpublish} style={{fontSize:"1.2rem", color:"#999999"}}/>
+                    </Tooltip>
+
+                        ):
+                    (<Tooltip placement="bottomRight" title="Published (Course has users you cant unpublish now)" arrowPointAtCenter>
+                    <FileDoneOutlined style={{fontSize:"1.2rem", color:"#999999"}}/>
+                    </Tooltip>)
+                    ):
+                    (
+                    <Tooltip placement="bottomRight" title="Publish" arrowPointAtCenter>
+                    <FileAddOutlined onClick={handlePublish} style={{fontSize:"1.2rem", color:"#999999"}}/>
+                    </Tooltip>
+                    )
+                    )
+                }
+
                 </div>
                 </div>
                 </div>
