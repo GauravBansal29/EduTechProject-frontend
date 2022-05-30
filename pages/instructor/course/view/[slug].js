@@ -3,10 +3,10 @@ import {useRouter} from 'next/router'
 import InstructorRoute from '../../../../components/routes/InstructorRoute'
 import axios from 'axios';
 import {toast} from 'react-toastify'
-import {Avatar, Button, Modal, List, Form, Tooltip} from 'antd'
+import {Avatar, Button, Modal, List, Form, Tooltip,Switch} from 'antd'
 import {EditOutlined, CheckOutlined, PlusOutlined, CloseOutlined} from '@ant-design/icons'
 import ReactMarkdown from 'react-markdown'
-
+import ReactPlayer from 'react-player'
 
 const CourseView= ()=>{
     const [course, setCourse]= useState({});
@@ -20,6 +20,8 @@ const CourseView= ()=>{
     const [uploading, setUploading]= useState(false);
     const [uploaded , setUploaded] =useState(false);
     const [courselength, setCourselength]= useState('');
+    const [videoplayidx, setVideoplayidx]= useState(-1);
+    const [freepreview, setFreepreview]= useState(false);
     useEffect(()=>{
         // get the course details from the slug
         const getCourse= async ()=>{
@@ -92,7 +94,8 @@ const CourseView= ()=>{
             const res= await axios.post(`/api/course/lesson/${slug}`, {
                 title: lessontitle.current.value,
                 description: lessondesc.current.value ,
-                videolink: lessonlink
+                videolink: lessonlink,
+                free_preview: freepreview
             });
             console.log(lessondesc.current.value);
             setCourse(()=>{
@@ -187,11 +190,15 @@ const CourseView= ()=>{
                     <CloseOutlined className="d-flex justify-content-center pt-4 pointer" style={{fontSize:"1.5rem" ,color:"#aaaaaa" ,marginLeft:"0.5rem"}} onClick={removevideoHandler}/>
                 }
                 </div>
+                <div className='mt-3 mb-2 ms-auto me-0 text-end' style={{fontWeight:"500" , color:"#555555"}}>Free Preview &nbsp; &nbsp;
+                <Switch checked={freepreview} name="free-preview" onChange={(v)=>{setFreepreview(v);}}/>
+                </div>
                 <Button 
                     type="primary" 
                     className={"mt-2 col-md-6 offset-md-3 text-center"} 
                     shape="round" 
-                    onClick= {addLessonHandler}>
+                    onClick= {addLessonHandler}
+                    disabled={uploading}>
                 {uploading? "Loading...": "Submit"}
                 </Button>
                 </form>
@@ -202,15 +209,25 @@ const CourseView= ()=>{
                 <h5>{courselength} lessons</h5>
                 {/* <h5>{JSON.stringify(course.lessons, null, 2)}</h5>  */}
                 <List
-                 itemLayout="horizontal"
+                 itemLayout="vertical"
                 dataSource={course.lessons}
                 renderItem={(item, index) => (
                  <List.Item>
+                {item.free_preview && <div className='text-end' style={{color:"green" , fontWeight:"500"}}>Free</div>}
                  <List.Item.Meta
                  avatar={<Avatar shape='square'>{index+1}</Avatar>}
-                title={<a href="https://ant.design">{item.title}</a>}
+                title={item.title}
                 description={item.content}
+                onClick={()=>{if(videoplayidx ==index) setVideoplayidx(-1); else setVideoplayidx(index);}}
                 />
+                
+                <div>
+                {
+                    (videoplayidx== index ) &&
+                    <ReactPlayer url={item.videolink.Location} controls></ReactPlayer>
+
+                }
+                </div>
       </List.Item>
     )}
   />

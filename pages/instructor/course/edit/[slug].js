@@ -1,8 +1,8 @@
 
 import InstructorRoute from '../../../../components/routes/InstructorRoute'
 import { useState , useEffect} from "react";
-import {Select, Button, Upload, message, Avatar,List, Tooltip, Popconfirm} from 'antd'
-import { LoadingOutlined, PlusOutlined, DeleteOutlined, EditOutlined, WindowsFilled} from '@ant-design/icons'
+import {Select, Button, Upload, message, Avatar,List, Tooltip, Modal, Switch} from 'antd'
+import { LoadingOutlined, PlusOutlined, DeleteOutlined, EditOutlined, CloseOutlined} from '@ant-design/icons'
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Router, useRouter } from "next/router";
@@ -26,6 +26,21 @@ const EditCourse = ()=>{
     });
 
     const [imgUrl, setImgUrl]= useState('');
+
+    // states for lesson update 
+    const [visible, setVisible]= useState(false);
+    const [current, setCurrent] =useState({
+        title:'',
+        content:'',
+        videolink:{},
+        _id:'',
+        slug:'',
+        free_preview:false
+    });
+    const [videofilename, setVideofilename]= useState('Upload Video');
+    const [uploading, setUploading]= useState(false);
+    const [uploaded , setUploaded] =useState(false);
+    const [listidx, setListidx]= useState(-1);
 
     useEffect(()=>{
         const loadstoredData= async()=>{
@@ -251,7 +266,72 @@ const EditCourse = ()=>{
         console.log(err);
         router.push('/err');
        }
-   }    
+   } 
+
+   const removevideoHandler= async()=>{
+    try{
+        const res= await axios.post('/api/course/remove-video', {video:current.videolink});
+        console.log(res.data);
+        setVideofilename("Upload Video");
+        setUploaded(false);
+    }
+    catch(err)
+    {
+        console.log(err);
+        toast("An error occured. Try again");
+    }
+}
+const videouploadHandler=async (e)=>{
+    // upload video to S3   
+    const file= e.target.files[0];
+    if(file) setVideofilename(file.name);
+    const videoData = new FormData();
+    videoData.append('video', file); // add the video data to this container
+    try{
+    setUploading(true);
+    const {data}= await axios.post('/api/course/video-upload', videoData);
+        setCurrent(()=>{
+            return {...current, videolink: data};
+        });
+        setUploading(false);
+        setUploaded(true);
+    }
+    catch(err)
+    {
+        console.log(err);
+        toast("Video upload unsuccessful");
+        setUploading(false);
+        setVideofilename("Upload Video");
+
+    }
+}
+
+const updateLessonHandler=async()=>{
+    // new need to first update the lesson and then update the lessonlist in the course
+    try{
+        const res= await axios.put(`/api/update-lesson/${current._id}`, {
+            title: current.title,
+            content: current.content,
+            videolink: current.videolink,
+            free_preview: current.free_preview,
+            slug: slug
+        });
+        let alllessons= values.lessons;
+        alllessons[listidx]= current;
+        setValues(()=>{
+            return {...values , lessons:alllessons};
+        });
+        await axios.put(`/api/update-course-lessons/${slug}`, {lessons: values.lessons}); // update lessons of course
+        setVisible(false);
+    }
+    catch(err)
+    {
+        console.log(err);
+        router.push('/err');
+        toast("Some error occured");
+    }
+
+}
     return(
         <InstructorRoute>
         <Link href={`/instructor/course/view/${slug}`}><div className="text-end" style={{fontWeight:"400"}}><a> Go back to course view &#8594; </a></div></Link>
@@ -325,11 +405,62 @@ const EditCourse = ()=>{
                 title={<a href="https://ant.design">{item.title}</a>}
                 description={item.content}
                 />
-            <Tooltip placement="topRight" title="Edit Lesson" arrowPointAtCenter><EditOutlined className="float-right me-4" style={{color:"#777777"}}/></Tooltip>
+            <Tooltip placement="topRight" title="Edit Lesson" arrowPointAtCenter><EditOutlined onClick={()=>{setVisible(true); setCurrent(item); setVideofilename(item.title); setUploaded(true); setListidx(index);}}  className="float-right me-4" style={{color:"#777777"}}/></Tooltip>
             <Tooltip placement="topRight" title="Delete Lesson" arrowPointAtCenter> <DeleteOutlined  onClick={()=>{handleDelete(index)}} className="float-right" style={{color:"#777777"}}/> </Tooltip>
               </List.Item>)} />
             </div>
             </div>
+            <Modal 
+                title="Update Lesson"
+                centered
+                visible={visible}
+                onCancel={()=>{setVisible(false);}}
+                footer={null}
+                style={{padding:"1rem"}}
+                >
+                <form>
+               
+                <input 
+                    type="text" 
+                    className="form-control square" 
+                    placeholder="title"
+                    onChange={(e)=>{setCurrent({...current, title:e.target.value})}}
+                    value={current.title} 
+                    autofocus
+                    required />
+                <textarea
+                    placeholder='Description'
+                    className='form-control mt-3'
+                    rows="7"
+                    cols="7"
+                    onChange={(e)=>{setCurrent({...current, content:e.target.value})}}
+                    value={current.content}
+                    autofocus
+                    required />
+               
+                <div className='d-flex justify-content-center'>
+                <label className='w-100 btn text-start mt-3' style={{backgroundColor: (videofilename == "Upload Video"? "#dddddd": "#aaaaaa"), fontWeight:"400",color: "#ffffff"}}>
+                {videofilename}
+                <input type="file" accept="video/*" hidden onChange={videouploadHandler} />
+                </label>
+                {
+                    (uploaded) && 
+                    <CloseOutlined className="d-flex justify-content-center pt-4 pointer" style={{fontSize:"1.5rem" ,color:"#aaaaaa" ,marginLeft:"0.5rem"}} onClick={removevideoHandler}/>
+                }
+                </div>
+                <div className='mt-3 mb-2 ms-auto me-0 text-end' style={{fontWeight:"500" , color:"#555555"}}>Free Preview &nbsp; &nbsp;
+                <Switch checked={current.free_preview} name="free-preview" onChange={(v)=>{setCurrent({...current, free_preview:v})}}/>
+                </div>
+                <Button 
+                    type="primary" 
+                    className={"mt-2 col-md-6 offset-md-3 text-center"} 
+                    shape="round" 
+                    onClick= {updateLessonHandler}
+                    disabled={uploading}>
+                {uploading? "Loading...": "Submit"}
+                </Button>
+                </form>
+                </Modal>
         </InstructorRoute>
 
     );
