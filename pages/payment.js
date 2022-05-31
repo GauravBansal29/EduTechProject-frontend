@@ -20,7 +20,9 @@ const Payment=()=>{
             try{
                 // button press pr ye API CALL hogi jisme hume bs amount aur currency batani hai
                 console.log(process.env.NEXT_PUBLIC_API);
-                const res = await axios.post(`${process.env.NEXT_PUBLIC_API}/create-order`,{
+                const {data}= await axios.get('/api/get-razorpay-key');
+                const razorpayKey= data.key;
+                const res = await axios.post(`/api/create-order`,{
                     amount: aamount.current.value +'00',
                     currency: "INR"
                 });
@@ -30,7 +32,7 @@ const Payment=()=>{
                 const {amount, id:order_id, currency } = res.data;
                 // handler is the function which is executed on successful payment
                 const options={
-                    key: process.env.NEXT_PUBLIC_RAZORPAY_ACCESS_KEY,
+                    key: razorpayKey,
                     amount: amount.toString(),
                     currency: currency,
                     name: "customer name",
@@ -38,7 +40,7 @@ const Payment=()=>{
                     order_id: order_id,
                     handler:async function(response)
                     {
-                        const result= await axios.post(`${process.env.NEXT_PUBLIC_API}/pay-order`,{
+                        const result= await axios.post(`/api/pay-order`,{
                             amount: amount,
                             razorpayPaymentId: response.razorpay_payment_id,
                             razorpayOrderId: response.razorpay_order_id,
