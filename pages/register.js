@@ -9,6 +9,7 @@ const Register= ()=>{
     const name= useRef(null);
     const email= useRef(null);
     const password= useRef(null);
+    const contact=useRef(null);
     const [loading , setLoading] = useState(false);
     const router= useRouter();
     const {state, dispatch} = useContext(Context);
@@ -25,6 +26,7 @@ const Register= ()=>{
            const res= await axios.post(`/api/register`, {
                     name: name.current.value,
                     email: email.current.value,
+                    contact:contact.current.value,
                     password: password.current.value
                 });
             toast("Successful Registration");
@@ -53,6 +55,9 @@ const Register= ()=>{
         </div>
         <div className="input-group mb-3 mx-auto">
         <input  type="text" className="form-control" placeholder="Enter your email" ref={email} />
+        </div>
+        <div className="input-group mb-3 mx-auto">
+        <input  type="number" className="form-control" placeholder="Enter your contact no." ref={contact} />
         </div>
         <div className="input-group mb-3 mx-auto">
         <input type="password" className="form-control" placeholder="Enter your Password" ref={password} />
