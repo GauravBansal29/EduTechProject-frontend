@@ -2,27 +2,27 @@ import {useState, useEffect} from "react"
 import axios from 'axios'
 import {useRouter} from 'next/router'
 import CourseCard from "../components/Cards/CourseCard";
-const Index= ()=>{
-    const router= useRouter();
-    const [courses, setCourses]= useState([]);
-    useEffect(()=>{
-        const fetchCourses = async()=>{
-            try{
-            const {data}= await axios.get('/api/courses');
-            if(data) setCourses(data);
-            }
-            catch(err)
-            {
-                console.log(err);
-                toast("Some error occured");
-                router.push('/err');
+const Index= ({courses})=>{
+     const router= useRouter();
+    // const [courses, setCourses]= useState([]);
+    // useEffect(()=>{
+    //     const fetchCourses = async()=>{
+    //         try{
+    //         const {data}= await axios.get('/api/courses');
+    //         if(data) setCourses(data);
+    //         }
+    //         catch(err)
+    //         {
+    //             console.log(err);
+    //             toast("Some error occured");
+    //             router.push('/err');
                 
-            }
+    //         }
 
-        }
-        fetchCourses();
-        console.log(courses);
-    },[router.isReady])
+    //     }
+    //     fetchCourses();
+    //     console.log(courses);
+    // },[router.isReady])
     return (
     <>
     <h1 className=" jumbotron text-center bg-primary linear-gradient text-white">Welcome to CourseBay</h1>
@@ -40,5 +40,17 @@ const Index= ()=>{
     </>
     );
     
+}
+
+export async function getServerSideProps(){
+    const {data}= await axios.get(`http://localhost:8000/api/courses`)
+    return (
+        {
+            props:
+            {
+                courses:data,
+            }
+        }
+    )
 }
 export default Index;

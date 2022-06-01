@@ -22,6 +22,7 @@ const EditCourse = ()=>{
         loading:false,
         uploading: false,
         paid:false,
+        category:'',
         lessons:[]
     });
 
@@ -54,6 +55,7 @@ const EditCourse = ()=>{
                     description: data.description,
                     price: data.price,
                     paid: data.paid,
+                    category:data.category,
                     lessons: data.lessons
                 }
                 );
@@ -177,7 +179,9 @@ const EditCourse = ()=>{
                         description: values.description ,
                         price: (values.paid ? values.price : 0),
                         image: change? imgres.data: imgobj,
-                        lessons: values.lessons 
+                        lessons: values.lessons ,
+                        paid: values.paid,
+                        category:values.category
                     });
                     if(res.status== 205){
                         toast("The title is already taken. Try Again");
@@ -345,9 +349,12 @@ const updateLessonHandler=async()=>{
         <textarea name="description" className="form-control" placeholder="Description" value={values.description} onChange={handleChange} />
         </div>
         <div className="form-row pt-3">
+        <input type="text" name="category" className="form-control" placeholder="Course Category" value={values.category} onChange={handleChange} />
+        </div> 
+        <div className="form-row pt-3">
         <div className="row">
         <div className="col-md-4">
-            <Select value={values.paid} style={{width: '100%'}} size='large' onChange={()=>{setValues({...values , paid: !values.paid })}}>
+            <Select value={values.paid} style={{width: '100%'}} size='large' onChange={(value)=>{setValues({...values , paid: value})}}>
             <Option value={true}>Paid</Option>
             <Option value={false}>Free</Option>
             </Select>

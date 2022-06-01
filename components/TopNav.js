@@ -33,7 +33,7 @@ const TopNav= ()=>{
       process.browser && setCurrent(window.location.pathname);
     },[process.browser && window.location.pathname]);
     return (
-      <Menu  mode="horizontal" selectedKeys={[current]} className="shadow-sm mb-2" >
+      <Menu  mode="horizontal" selectedKeys={[current]} className="shadow-sm mb-1" >
       <Item key="/" onClick={(e)=>{setCurrent(e.key)}}>
         <Link href="/"><a>Home</a></Link>
       </Item>
