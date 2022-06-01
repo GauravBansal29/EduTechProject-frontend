@@ -61,8 +61,36 @@ const becomeInstructor=  ()=>{
 
     return( 
     <>
-    <h2>Want to become an instructor</h2>
-    <button className="btn btn-primary" onClick= {userOnboarding}>Setup with your bank details</button>
+    
+    <div className='row'>
+
+    <div className='row'>
+    <div className='col-md-8 mt-5 text-center' style={{fontSize:"3rem"}}>
+    <div className="px-5 pb-2" style={{fontFamily:"Merriweather", fontWeight:"bold"}}>Become a Instructor</div>
+    <div className='px-5'><button className="btn btn-primary" style={{ fontSize:"1.2rem"}} onClick= {userOnboarding}>Setup with your bank details</button></div>
+    </div>
+    <div className='col-md-4 text-center'>
+    <img src="/instructor5.jpg" style={{width:"25rem", height:"14rem"}}  />
+    <div style={{fontWeight:"bold"}}>Get Full Support from Our Side</div>
+    </div>
+    </div>
+    <div className='row'>
+    <div className='col-md-4 text-center'>
+    <img src="/instructor2.jpg" style={{width:"15rem", height:"14rem"}}  />
+    <div style={{fontWeight:"bold"}} >Make high quality videos to stand out</div>
+    </div>
+    <div className='col-md-4 text-center'>
+    <img src="/instructor3.jpg" style={{width:"15rem", height:"14rem"}}  />
+    <div style={{fontWeight:"bold"}}>Interact with students </div>
+    </div>
+    <div className='col-md-4 text-center'>
+    <img src="/instructor1.jpg" style={{width:"15rem", height:"14rem"}}  />
+    <div style={{fontWeight:"bold"}} >Engage your students </div>
+    </div>
+    </div>
+    </div>
+    
+    
     <Modal
     title="Add your bank details"
     centered

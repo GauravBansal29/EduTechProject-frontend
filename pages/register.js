@@ -46,9 +46,12 @@ const Register= ()=>{
     }
     return (
         <>
-        <h1 className="bg-primary jumbotron text-white"> Register </h1>
-        <div className ="row">
-        <div className=" h-25 w-25 mh-auto col input-group m-3 bg-light">
+        <div className ="row bg-light">
+        <div className="col-md-8">
+        <img src="/loginimage3.png" style={{width:"45rem"}}/>
+        </div>
+        <div className="col-md-4">
+        <div className="px-3 py-4 mt-5 ml-4" style={{ fontSize:"1rem" ,width:'20rem', backgroundColor:"rgba(255,255,255)", boxShadow:"0 3px 10px rgb(0,0, 0,0.2)"}}>
         <form onSubmit={onSubmitHandler} >
         <div className="input-group mb-3 mx-auto">
         <input  type="text" className="form-control" placeholder="Enter your name" ref={name} />
@@ -66,10 +69,11 @@ const Register= ()=>{
         <button type="submit" className="form-control" disabled={loading}>{loading? <SyncOutlined spin/> : "SUBMIT"}</button>
         </div>
         </form>
-        <div className="row text-center">
-        Already Registered?
+        <div>
+        Already Registered? &nbsp;
          <Link href="/login"><a>Login</a></Link>
         </div>
+        </div>  
         </div>
         </div>
         </>

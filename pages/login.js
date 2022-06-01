@@ -61,20 +61,28 @@ const Login= ()=>{
 
     return (
         <>
-        <h1 className="bg-primary jumbotron text-white"> Login </h1>
-
-        <div className="p-3 my-auto mx-auto bg-light" style={{ width:'fit-content'}}>
+        {/* <img src="loginimage1.png" style={{width:"20rem"}}/>
+        <img src="loginimage2.png" style={{width:"20rem"}}/>
+        
+        <img src="loginimage4.png" style={{width:"20rem"}}/> */}
+        <div className="row bg-light">
+        <div className="col-md-8">
+        <img src="/loginimage3.png" style={{width:"45rem"}}/>
+        </div>
+        <div className="col-md-4">
+        <div className="p-3 mt-5 ml-4" style={{ fontSize:"1rem" ,width:'20rem', backgroundColor:"rgba(255,255,255)", boxShadow:"0 3px 10px rgb(0,0, 0,0.2)"}} >
         <form onSubmit={onSubmitHandler} style={{width:'100%'}} >
         <div className="form-group mb-3 mx-auto">
         <input  type="text" className="form-control" placeholder="Enter your email" ref={email} />
         </div>
         <div className="input-group mb-3 mx-auto">
-        <input type="password" className="form-control w-30" placeholder="Enter your Password" ref={password} />
+        <input type="password" className="form-control" placeholder="Enter your Password" ref={password} />
         </div>
         <div className="input-group mb-3 mx-auto ">
-        <button type="submit" className="form-control w-10" disabled={loading}>{loading? <SyncOutlined spin/> : "SUBMIT"}</button>
+        <button type="submit" className="form-control" disabled={loading}>{loading? <SyncOutlined spin/> : "SUBMIT"}</button>
         </div>
         </form>
+        
         <div className="input-group mb-3 text-center mx-auto">
         Not Registered?&nbsp;&nbsp;
          <Link href="/register"><a>Register</a></Link>
@@ -83,6 +91,9 @@ const Login= ()=>{
         <Link href="/forgot-password"><a>Forgot Password?</a></Link>
         </div>
         </div>
+        </div>
+        </div>
+
         </>
     );
 }

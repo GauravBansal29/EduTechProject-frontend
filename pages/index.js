@@ -25,10 +25,10 @@ const Index= ({courses})=>{
     // },[router.isReady])
     return (
     <>
-    <h1 className=" jumbotron text-center bg-primary linear-gradient text-white">Welcome to CourseBay</h1>
  
-    <div className="container-fluid">
-    <div className="row">
+    <div className="container-fluid bg-light">
+    <div style={{fontFamily:"Merriweather", fontSize:"2.5rem", fontWeight:"500"}}>Bestsellers</div>
+    <div className="row mt-3">
    { courses.map((course) => {
         return(<div key={course._id} className="col-md-4" >
        <CourseCard course={course} />
