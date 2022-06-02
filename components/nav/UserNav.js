@@ -8,7 +8,7 @@ const UserNav=()=>{
     useEffect(()=>{
         const loadisInstructor= async()=>{
             try{
-                const {data}= await axios.get('/current-instructor');
+                const {data}= await axios.get('/api/current-instructor');
                 if(data.ok) setIsinstructor(true);
             }
             catch(err)

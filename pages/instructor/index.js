@@ -30,7 +30,7 @@ const InstructorIndex= ()=>{
     return(
         <InstructorRoute>
         <div>
-        <h1 className="jumbotron text-center square">INSTRUCTOR DASHBOARD</h1>
+        <h2 style={{fontFamily:"Merriweather", fontWeight:"bold"}} className="ms-5 mt-4">Instructor Dashboard</h2>
         
             <div className="container" style={{marginLeft:"2.5rem"}}>
             <div className="row align-items-stretch justify-content-start card-deck">

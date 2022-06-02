@@ -66,7 +66,7 @@ const becomeInstructor=  ()=>{
 
     <div className='row'>
     <div className='col-md-8 mt-5 text-center' style={{fontSize:"3rem"}}>
-    <div className="px-5 pb-2" style={{fontFamily:"Merriweather", fontWeight:"bold"}}>Become a Instructor</div>
+    <div className="px-5 pb-2" style={{fontFamily:"Merriweather", fontWeight:"bold"}}>Become an Instructor</div>
     <div className='px-5'><button className="btn btn-primary" style={{ fontSize:"1.2rem"}} onClick= {userOnboarding}>Setup with your bank details</button></div>
     </div>
     <div className='col-md-4 text-center'>
