@@ -338,6 +338,7 @@ const updateLessonHandler=async()=>{
 }
     return(
         <InstructorRoute>
+        <div className='m-3'>
         <Link href={`/instructor/course/view/${slug}`}><div className="text-end" style={{fontWeight:"400"}}><a> Go back to course view &#8594; </a></div></Link>
          <h6>Course Description</h6>
         <form>
@@ -468,6 +469,7 @@ const updateLessonHandler=async()=>{
                 </Button>
                 </form>
                 </Modal>
+                </div>
         </InstructorRoute>
 
     );

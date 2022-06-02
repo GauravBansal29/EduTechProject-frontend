@@ -156,7 +156,8 @@ const CreateCourse =()=>{
 
     return (
         <InstructorRoute>
-        <h1 className="jumbotron text-center">Create Course</h1>
+        <div className="m-3">
+        <h2 style={{fontFamily:"Merriweather"}}>Create New Course</h2>
         <form onSubmit={onsubmitHandler}>
         <div className="form-group">
         <div className="form-row pt-3">
@@ -211,6 +212,7 @@ const CreateCourse =()=>{
         </div>
         </div>
         </form>
+        </div>
         </InstructorRoute>
     )
 }

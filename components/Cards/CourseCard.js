@@ -9,6 +9,7 @@ const CourseCard = ({course})=>{
     return (<Link href={`/course/${slug}`}>
         <a>
         <Card
+        hoverable
         className='mb-4'
         cover={
             <img src= {image.Location} alt={name} style={{height:"200px" , objectFit:"cover"}} className="p-1" />

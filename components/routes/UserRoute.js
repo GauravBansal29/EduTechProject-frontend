@@ -35,12 +35,12 @@ const UserRoute= ({children})=>{
 
     return (
             !hidden ? (
-            <div className="container-fluid">
-            <div className="row">
-            <div className="col-md-2">
-            <UserNav  />
+            <div className="container-fluid" style={{ marginTop:'-5px' ,height:'calc(100vh - 50px)'}}>
+            <div className="row" style={{height:'calc(100vh - 50px)'}}>
+            <div className="col-md-2 bg-light" style={{boxShadow:" 0 3px 5px rgb(0 ,0, 0, 0.2)"}}>
+            <UserNav />
             </div>
-            <div className="col-md-9">
+            <div className="col-md-10">
             {children}
             </div>
             </div>
