@@ -10,3 +10,6 @@
   background-color: rgba(147,112,219) !important;
   color:aliceblue !important;
 }
+::-webkit-scrollbar {
+  display: none;
+}

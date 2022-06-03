@@ -1,11 +1,13 @@
 import { useRouter } from "next/router";
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useContext} from 'react'
 import { toast } from "react-toastify";
 import axios from 'axios'
 import {Avatar, Menu} from 'antd'
 import {DownOutlined, LeftOutlined, PlayCircleOutlined, RightOutlined, UpOutlined} from '@ant-design/icons'
+import {Context} from '../../../context'
 import ReactPlayer from 'react-player'
 const CourseView= ()=>{
+    const {state: {user}} = useContext(Context);
     const {Item}=Menu;
     const router= useRouter();
     const {slug}= router.query;
@@ -44,7 +46,11 @@ const CourseView= ()=>{
             if(res && res.data)
             {
             const {data}= await axios.get(`/api/course-discussions/${res.data._id}`);
-            setCoursediscussion(data);
+            setCoursediscussion(()=>{
+                let m= data;
+                m.sort((a,b)=>{return  new Date(b.createdAt) - new Date(a.createdAt)});
+                return m;
+            })
             }
             }
             catch(err)
@@ -65,11 +71,12 @@ const CourseView= ()=>{
             });
             toast("Discussion added");
             setLessondiscussion(()=>{
-                return [...lessondiscussion, res.data];
+            return [ {...res.data, user:{name:user.name}}, ...lessondiscussion ];
             });
             setCoursediscussion(()=>{
-                return [...coursediscussion, res.data];
+                return [ {...res.data, user:{name:user.name}} ,...coursediscussion];
             })
+            setNewdiscussion('');
             
         }
         catch(err)
@@ -80,28 +87,26 @@ const CourseView= ()=>{
     }
     return (
       enrolled? 
-      (<div>
+      (<div style={{overflowX:"hidden"}}>
         <div className="row">
-        <div  className="p-0 ps-2" style={{width:"fit-content" ,height:'calc(100vh - 50px)'}}>
-        { course && 
+        <div  className="p-0 mt-0" style={{width:"fit-content" ,height:'calc(100vh - 50px)', overflow:"scroll"}}>
+        { course &&    
         <Menu
         defaultSelectedKeys={[clicked]}
         inlineCollapsed={collapse}
         style={{height:'calc(100vh - 50px)'}}>
-       
-           {!collapse && <h5 className="m-3" style={{fontFamily:"Montserrat", fontWeight:"600"}}>{course.name}</h5>}
-            <div>
-            
-            <div onClick={()=>{setCollapse(!collapse)}} style={{ width:"fit-content" ,fontSize:"1rem"}}>
-            {
-                collapse? <div style={{width:"fit-content", fontSize:"0.8rem", fontWeight:"bold"}} className="m-3 text-muted" >View<RightOutlined /></div>: <div className="ms-3">Course Content &nbsp; &nbsp; &nbsp; &nbsp; <LeftOutlined /></div>
-            }
+            <div className="ms-2 pl-0" style={{ fontWeight:"700", borderBottom:"1px solid rgb(0,0,0,0.1)"}}>
+            {!collapse && <h5 className="p-3 pb-0" style={{fontSize:"1.5rem" ,  textShadow:"0 1px 0 rgba(255, 255, 255, 0.4)" ,fontFamily:"Abel", fontWeight:"700"}}>{course.name}</h5>}
             </div>
+            <div onClick={()=>{setCollapse(!collapse)}}>
+            {
+                collapse? <div style={{width:"fit-content", fontSize:"0.8rem", fontWeight:"bold"}} className="m-3 text-muted" >View<RightOutlined /></div>: <div className="ms-3 mt-2 p-2 pb-1" style={{fontSize:"1.1rem" ,fontWeight:"bold"}}>Course Content &nbsp;<LeftOutlined /></div>
+            }
             </div>
             {
                 course.lessons.map((lesson, index)=>{
                     return (
-                <Item  style={{ paddingLeft: !collapse &&  "2rem" , paddingRight: !collapse && "5rem" , fontSize:"0.87rem"}} onClick={()=>{setClicked(index)}} key={index} icon={collapse? <Avatar>{index}</Avatar>:<PlayCircleOutlined />}>{lesson.title.substring(0,30)}</Item>
+                <Item  style={{ paddingLeft: !collapse &&  "2rem" , paddingRight: !collapse && "5rem" , fontSize:"0.87rem"}} onClick={()=>{setClicked(index); setCollapse2(true); setCollapse3(true);}} key={index} icon={collapse? <Avatar>{index}</Avatar>:<PlayCircleOutlined />}>{lesson.title.substring(0,30)}</Item>
 
                     );
                 })
@@ -109,9 +114,10 @@ const CourseView= ()=>{
         </Menu>
         }
         </div>
-        <div className="col p-0">
+        <div className="col p-0" style={{height:'calc(100vh - 50px)' , overflow:"scroll"}}>
         {clicked !=-1 ?
             <>
+                        
             <div style={{height:"60vh"}}>
              <ReactPlayer
                 url={course.lessons[clicked].videolink.Location}
@@ -123,12 +129,12 @@ const CourseView= ()=>{
             </div>
             <div>
             <div>
-            <h3 className="m-2" style={{fontSize:"1.2rem", fontFamily:"Montserrat", fontWeight:"700"}} onClick={()=>{setCollapse2(!collapse2)}}>Lesson Description {collapse2 ? <DownOutlined />: <UpOutlined />}</h3>
-            {!collapse2 && <div className="m-2" style={{fontSize:"1rem"}}>{course.lessons[clicked].content}</div>}
+            <h3 className="m-2 p-3" style={{fontSize:"1.4rem", fontFamily:"Montserrat", fontWeight:"700" , backgroundColor:"#eeeeee"}} onClick={()=>{setCollapse2(!collapse2)}}>Lesson Description {collapse2 ? <DownOutlined />: <UpOutlined />}</h3>
+            {!collapse2 && <div className="m-2 ms-4" style={{fontWeight:500 ,fontSize:"1rem", fontFamily:"Lato"}}>{course.lessons[clicked].content}</div>}
             </div>
             <div>
-            <h3 className="m-2" 
-                style={{fontSize:"1.2rem", fontFamily:"Montserrat", fontWeight:"700"}} 
+            <h3 className="m-2 p-3" 
+                style={{fontSize:"1.4rem", fontFamily:"Montserrat", fontWeight:"700", backgroundColor:"#eeeeee"}} 
                 onClick={()=>
                 {
                     setLessondiscussion(()=>{
@@ -144,21 +150,23 @@ const CourseView= ()=>{
             Discussion{collapse3 ? <DownOutlined />: <UpOutlined />}
             </h3>
             {!collapse3 && <div className="m-2" style={{fontSize:"1rem"}}>
+                <div className="row ms-2">
                 <input 
-                className="form-control" 
+                className="col-md-8 m-2" 
                 placeholder="Add something" 
                 value={newdiscussion} 
                 onChange={(e)=>{
                     setNewdiscussion(e.target.value)
                 }} />
-               {course && course.lessons && <button className="btn btn-primary" onClick={addDiscussion}>SUBMIT</button>}
+               {course && course.lessons && <button className="btn col-md-3 m-2" style={{color:"white" , fontWeight:"bold" ,backgroundColor:"rgba(163, 50, 234)"}}onClick={addDiscussion}>SUBMIT</button>}
+               </div>
                 {/* {JSON.stringify(lessondiscussion, null, 4)} */}
                 <div>
                 {lessondiscussion.map((item)=>{
                     return (
-                        <div className="m-3 p-2" style={{width:"fit-content" ,borderRadius:"2px" ,backgroundColor:"#eeeeee"}}>
-                        <div style={{fontFamily:"serif", fontWeight:"bold"}}>{item.user.name}</div>
-                        <div style={{fontFamily:"Raleway"}}>{item.value}</div>
+                        <div className="m-3 p-2 pe-5" style={{width:"fit-content" ,borderRadius:"10px" ,backgroundColor:"#eeeeee"}}>
+                        <div style={{fontFamily:"Lato", fontWeight:"bold"}}>{item.user.name}</div>
+                        <div style={{ marginTop:"0.5rem", marginLeft:"0.2rem" ,fontFamily:"Lato"}}>{item.value}</div>
                         </div>
                     );
                 })}
@@ -171,8 +179,15 @@ const CourseView= ()=>{
             </div>
             </>
             :
-         <>Click on the lesson to start learning</>
+         <>
+         <div className="text-center mt-5" style={{ color:"#eeeeee" ,fontSize:"4rem"}} >
+         <PlayCircleOutlined /> 
+         <br></br>
+         Click on the lesson to start learning
+         </div>
+         </>
          }
+        
         </div>
         </div>
 

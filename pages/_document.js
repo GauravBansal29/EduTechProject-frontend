@@ -13,6 +13,9 @@ export default function Document() {
 <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet"></link>
 <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet"></link>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap" rel="stylesheet"></link>
+<link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet"></link>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet"></link>
+<link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet"></link>
         </Head>
 
       <body>
