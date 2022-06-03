@@ -27,7 +27,7 @@ const Index= ({courses})=>{
     <>
  
     <div className="container-fluid bg-light">
-    <div style={{fontFamily:"Merriweather", fontSize:"2.5rem", fontWeight:"500"}}>Bestsellers</div>
+    <div style={{fontFamily:"Merriweather", fontSize:"2rem", fontWeight:"500"}}>Bestsellers</div>
     <div className="row mt-3">
    { courses.map((course) => {
         return(<div key={course._id} className="col-md-4" >

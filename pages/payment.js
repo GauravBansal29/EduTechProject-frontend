@@ -83,6 +83,7 @@ const Payment=()=>{
             <input type="text" ref={aamount}  placeholder="enter the amount"/>
             <button disabled={loading} type="submit">PAY</button>
         </form>
+        
     </div>);
 }
 export default Payment;

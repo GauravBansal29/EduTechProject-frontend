@@ -142,7 +142,7 @@ const updateuser= async()=>{
 
 const payout= async()=>{
     try{
-        const payout_amount= price*10;
+        const payout_amount= price*90;
         const res= await axios.post('/api/payout',{
             amount: payout_amount,
             instructorid: instructor._id
@@ -189,7 +189,7 @@ const payout= async()=>{
 
         }
         {
-            (enrolled) ? (<button className='btn  btn-lg col-12' style={{backgroundColor:"rgba(255,255,255,0.5)", color:"white" }}>Go to course</button>)
+            (enrolled) ? (<button className='btn  btn-lg col-12' style={{backgroundColor:"rgba(255,255,255,0.5)", color:"white" }} onClick={()=>{router.push(`/user/course/${slug}`);}}>Go to course</button>)
             :
             (<button className='btn  btn-lg col-12' onClick={paid?loadRazorPay: handleFreeEnrollment} style={{backgroundColor:"rgba(255,255,255,0.5)", color:"white" }}>{paid? "Buy Now": "Enroll Now"}</button>)
         }

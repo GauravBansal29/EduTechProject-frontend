@@ -6,3 +6,7 @@
     rgba(163, 150, 234, 1) 92%
   );
 }
+.ant-menu-item-selected {
+  background-color: rgba(147,112,219) !important;
+  color:aliceblue !important;
+}
