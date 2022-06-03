@@ -6,9 +6,30 @@
     rgba(163, 150, 234, 1) 92%
   );
 }
+
+.ant-menu-horizontal > .ant-menu-item:hover,
+.ant-menu-horizontal > .ant-menu-submenu:hover,
+.ant-menu-horizontal > .ant-menu-item-active,
+.ant-menu-horizontal > .ant-menu-submenu-active,
+.ant-menu-horizontal > .ant-menu-item-open,
+.ant-menu-horizontal > .ant-menu-submenu-open,
+.ant-menu-horizontal > .ant-menu-item-selected,
+.ant-menu-horizontal > .ant-menu-submenu-selected {
+  background: transparent !important; 
+  border-bottom: none !important;
+  transition: none !important;
+  font-weight: bold;
+}
+.ant-menu-horizontal > .ant-menu-item::after,
+.ant-menu-horizontal > .ant-menu-submenu::after {
+  border-bottom: none !important;
+  transition: none !important;
+  color:blueviolet !important;
+}
 .ant-menu-item-selected {
   background-color: rgba(147,112,219) !important;
   color:aliceblue !important;
+  
 }
 ::-webkit-scrollbar {
   display: none;

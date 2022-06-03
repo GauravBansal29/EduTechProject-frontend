@@ -31,7 +31,7 @@ const SingleCourse= ({course})=>{
                 router.push("/err");
             }
         }
-        checkEnrollment();
+       if(user) checkEnrollment();
     }, []);
 
     const handleFreeEnrollment=async()=>{

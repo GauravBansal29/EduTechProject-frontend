@@ -164,9 +164,9 @@ const CourseView= ()=>{
                 />
                 </div>
                 <div style={{width:"fit-content" ,maxWidth:"30rem" ,paddingTop:"0px"}} >
-                 <h5 className="text-primary" >{course.name}</h5>
-                 <p style={{marginTop:"-10px" ,fontWeight: "bold", color:"#cccccc"}}>{courselength} lessons</p>
-                <p><ReactMarkdown>{course.description}</ReactMarkdown></p>
+                 <h5 style={{fontFamily:"Lato" ,color:"rgba(147,112,219,1)"}}>{course.name}</h5>
+                 <p style={{fontFamily:"Lato", marginTop:"-10px" ,fontWeight: "bold", color:"#cccccc"}}>{courselength} lessons</p>
+                <p style={{fontFamily:"Lato", fontWeight:"500"}}><ReactMarkdown>{course.description}</ReactMarkdown></p>
                 </div>
                 <div className="col mr-0">
                 <div className='row mb-3' onClick={editoptions} >
@@ -210,10 +210,9 @@ const CourseView= ()=>{
                 <hr></hr>
                 <div>
                 <Button 
-                    type="primary" 
                     className={"col-md-6 offset-md-3 text-center"} 
                     shape="round" icon={<PlusOutlined />} 
-                    style={{fontWeight:"bold"}}
+                    style={{color:"white" ,fontWeight:"bold", backgroundColor:"rgba(147,112,219,0.9)"}}
                     onClick= {()=>{setModalvisible(true)}}>
                 Add Lesson
                 </Button>
