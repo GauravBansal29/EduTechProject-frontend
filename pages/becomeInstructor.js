@@ -3,7 +3,7 @@ import { useRouter , Router } from 'next/router';
 import {Modal} from 'antd'
 import {useState, useContext} from 'react'
 import { toast } from "react-toastify";
-import { Context } from "../../context"
+import { Context } from "../context"
 const becomeInstructor=  ()=>{
     const {state: {user}, dispatch} = useContext(Context);
     const router= useRouter();

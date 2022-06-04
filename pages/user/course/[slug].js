@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import {useState, useEffect, useContext} from 'react'
 import { toast } from "react-toastify";
 import axios from 'axios'
-import {Avatar, Menu} from 'antd'
+import {Avatar, Checkbox, Menu} from 'antd'
 import {DownOutlined, LeftOutlined, PlayCircleOutlined, RightOutlined, UpOutlined} from '@ant-design/icons'
 import {Context} from '../../../context'
 import ReactPlayer from 'react-player'
@@ -20,7 +20,7 @@ const CourseView= ()=>{
     const [coursediscussion, setCoursediscussion]= useState([]);
     const [lessondiscussion, setLessondiscussion]= useState([]);
     const [newdiscussion, setNewdiscussion] =useState('');
-
+    const [complete , setComplete] =useState([]);
     useEffect(()=>{
         const checkEnrollment= async ()=>{
             try{
@@ -62,6 +62,29 @@ const CourseView= ()=>{
         loadCourse();
     },[slug])
 
+    useEffect(()=>{
+        const getCompleteStatus= async ()=>{
+            try{
+                const res= await axios.get(`/api/completed/${course._id}`);
+                console.log(res.data);
+                setComplete(()=>{
+                    let orrarray= res.data;
+                     let returnarray =orrarray.map((item)=>{
+                            return item.lesson;
+                    })
+                    console.log(returnarray);
+                    return returnarray;
+                });
+            }
+            catch(err)
+            {   
+                console.log(err);
+                toast("Complete status loading unsuccessful");
+            }
+        }
+        if(course && course._id) getCompleteStatus();
+    }, [slug, course])
+
     const addDiscussion= async ()=>{
         try{
             const res= await axios.post('/api/adddiscussion',{
@@ -85,6 +108,44 @@ const CourseView= ()=>{
             toast("Error loading discussions");
         }
     }
+
+    const markAsComplete= async ()=>{
+        try{
+
+           // await new Promise(resolve => setTimeout(resolve, 5000));
+            // if not included in array then mark as complete and add in state array 
+            if( complete.indexOf(course.lessons[clicked]._id) == -1)
+            { 
+                const res1= await axios.post('/api/markascomplete', {
+                    lessonid: course.lessons[clicked]._id,
+                    courseid: course._id,
+                });
+                setComplete(()=>{
+                    return [...complete, course.lessons[clicked]._id];
+                })
+            }
+            else 
+            {
+                // if already there remove from state array and database
+                const res2= await axios.post('/api/markasincomplete', {
+                    lessonid: course.lessons[clicked]._id,
+                    courseid: course._id
+                });
+                let idx= complete.indexOf(course.lessons[clicked]._id);
+                setComplete(()=>{
+                  return complete.filter((item, i)=> i!==idx);
+                })
+            }
+
+
+            
+        }
+        catch(err)
+        {
+            console.log(err);
+            toast("Some error occured in setting complete status");
+        }
+    }
     return (
       enrolled? 
       (<div style={{overflowX:"hidden"}}>
@@ -106,7 +167,10 @@ const CourseView= ()=>{
             {
                 course.lessons.map((lesson, index)=>{
                     return (
-                <Item  style={{ paddingLeft: !collapse &&  "2rem" , paddingRight: !collapse && "5rem" , fontSize:"0.87rem"}} onClick={()=>{setClicked(index); setCollapse2(true); setCollapse3(true);}} key={index} icon={collapse? <Avatar>{index}</Avatar>:<PlayCircleOutlined />}>{lesson.title.substring(0,30)}</Item>
+                <Item  style={{ paddingLeft: !collapse &&  "2rem", fontSize:"0.87rem"}} onClick={()=>{setClicked(index); setCollapse2(true); setCollapse3(true);}} key={index} icon={collapse? <Avatar>{index}</Avatar>:<PlayCircleOutlined />}>
+            <span style={{paddingRight: (!collapse) && "3rem"}}>{lesson.title.substring(0,30)}</span>
+               <span className="float-end"> <Checkbox disabled={clicked !== index } onChange={markAsComplete} checked={complete.indexOf(course.lessons[index]._id) !== -1}/> </span>
+                </Item>
 
                     );
                 })
