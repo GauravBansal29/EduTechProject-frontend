@@ -17,7 +17,7 @@ const UserNav=()=>{
             }
         }
         loadisInstructor();
-    })
+    },[])
     useEffect(()=>{
         process.browser && setCurrent(window.location.pathname);
     },[process.browser && window.location.pathname])

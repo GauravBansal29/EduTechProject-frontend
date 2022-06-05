@@ -35,25 +35,48 @@ const UserIndex=()=>{
 
         const loadProgress= async()=>{
             
-            courses.map(async(course)=>{
-                const {data}= await axios.get(`/api/completed/${course._id}`);
-                setProgress(()=>{
-                    return [...progress, {length: data.length, courseid: data.course}];
-                })
-            })
+            
+                axios.all(courses.map((course)=>axios.get(`/api/completed/${course._id}`))).then(
+                    (data)=>{
+                        console.log(data);
+
+                        let x= data.map((item)=>{
+                            if(item.data && item.data.length >0)
+                            return {length: item.data.length , courseid: item.data[0].course};
+                        })
+                        setProgress(x);
+                        console.log(x);
+                    //   data.map((item)=>{
+                    //       console.log(item.data);
+                    //     setProgress(()=>{
+                    //         return [...progress, {length: item.data.length, courseid: item.data[0].course}];
+                    //      });
+                    },
+                    (err)=>{
+                        console.log(err);
+                    }
+                ); 
         }
 
-        loadProgress();
+     loadProgress();
 
     }, [courses])
 
     const getWidth=(courseid, givenlength)=>
     {
-        const myprogress= progress.filter(item=>{item.courseid == courseid});
-        console.log(myprogress);
-        let x= (myprogress.length/givenlength) *100;
+        //console.log(courseid, givenlength);
+        const myprogress= progress.filter(item=>{ if(item && item.courseid) return (item.courseid == courseid)});
+        //console.log(myprogress[0].length, givenlength);
+        
+        let x= (myprogress.length >0)?((myprogress[0].length/givenlength) *100):0;
         console.log(x);
-        return x;
+        let a= x + "%"
+        console.log(a);
+        return a;
+    }
+    const getprogress= (courseid)=>{
+        const myprogress= progress.filter(item=>{if(item && item.courseid) return (item.courseid == courseid)});
+        return (myprogress.length >0)? (myprogress[0].length): 0;
     }
     return (
         <UserRoute>
@@ -64,7 +87,7 @@ const UserIndex=()=>{
             }
             {/* <pre>{JSON.stringify(courses, null,4)}</pre> */}
             
-               { courses.length!=0 && courses.map((course)=>{
+               { progress.length!=0 && courses.length!=0 && courses.map((course)=>{
                     return (<Link href={`/user/course/${course.slug}`} className="pointer"><div key={course._id} onMouseOver={()=>{setMyhover(course._id);}} onMouseOut={()=>{setMyhover('');}} className="row mb-1" style={{ backgroundColor: (myhover==course._id)&& "rgba(208,208,255,0.3)" ,boxShadow:"0 3px 10px rgb(0,0, 0,0.2)"}}>
                     <div className='col-md-1 p-0'>
                     <Avatar 
@@ -85,7 +108,7 @@ const UserIndex=()=>{
                      <div className="progress-bar" role="progressbar" style={{backgroundColor:"rgba(75,0,130,0.4)" ,width:getWidth(course._id, course.lessons.length) }} aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <div className='text-end text-muted ' style={{fontSize:"0.8rem" , fontWeight:"500"}}>
-                    Completed 5 of 10 lectures
+                    Completed {getprogress(course._id)} of {course.lessons.length} lessons
                     </div>
                     </div>
 

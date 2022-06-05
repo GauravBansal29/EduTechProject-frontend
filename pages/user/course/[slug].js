@@ -136,9 +136,28 @@ const CourseView= ()=>{
                   return complete.filter((item, i)=> i!==idx);
                 })
             }
+        }
+        catch(err)
+        {
+            console.log(err);
+            toast("Some error occured in setting complete status");
+        }
+    }
+    const markAsComplete2= async ()=>{
+        try{
 
-
-            
+           // await new Promise(resolve => setTimeout(resolve, 5000));
+            // if not included in array then mark as complete and add in state array 
+            if( complete.indexOf(course.lessons[clicked]._id) == -1)
+            { 
+                const res1= await axios.post('/api/markascomplete', {
+                    lessonid: course.lessons[clicked]._id,
+                    courseid: course._id,
+                });
+                setComplete(()=>{
+                    return [...complete, course.lessons[clicked]._id];
+                })
+            }
         }
         catch(err)
         {
@@ -189,6 +208,7 @@ const CourseView= ()=>{
                 height="100%"
                 playing
                 controls 
+                onEnded={markAsComplete2}
             />
             </div>
             <div>
