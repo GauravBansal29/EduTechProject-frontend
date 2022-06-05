@@ -38,3 +38,10 @@
   background-color:rgba(81, 41, 177, 0.7) ;
   border-color:rgba(81, 41, 177, 0.7);
 }
+
+.navbar {
+  -webkit-box-shadow: 0px 4px 23px 0px rgba(224,227,255,1);
+-moz-box-shadow: 0px 4px 23px 0px rgba(224,227,255,1);
+box-shadow: 0px 4px 23px 0px rgba(224,227,255,1);
+  /* the rest of your styling */
+}

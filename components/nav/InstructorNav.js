@@ -15,11 +15,18 @@ const InstructorNav= ()=>{
         <div className="nav flex-column nav-pills mt-2  ">
          <div className='pb-1'>
         <Link href="/instructor" >
-            <a className={`nav-link ${current == '/instructor' && 'active'} `} style={{backgroundColor:(current == '/instructor')&&"rgba(75,0,130,0.7)"}}>Dashboard</a>
-        </Link>     
+            <a className={`nav-link ${current == '/instructor' && 'active'} `} style={{color:(current !== '/instructor' ) && "#4B0082", backgroundColor:(current == '/instructor')&&"rgba(75,0,130,0.7)"}}>Dashboard</a>
+        </Link> 
+        </div>
+        <div className='pb-1'>  
         <Link href="/instructor/course/create" >
-            <a className={`nav-link ${current == '/instructor/course/create' && 'active'} `} style={{backgroundColor:(current == '/instructor/course/create') && "rgba(75,0,130,0.7)"}}>Create Course</a>
+            <a className={`nav-link ${current == '/instructor/course/create' && 'active'} `} style={{color:(current !== '/instructor/course/create' ) && "#4B0082", backgroundColor:(current == '/instructor/course/create') && "rgba(75,0,130,0.7)"}}>Create Course</a>
         </Link>    
+        </div>
+        <div className='pb-1'>
+        <Link href="/instructor/profile" >
+            <a className={`nav-link ${current == '/instructor/profile' && 'active'} `} style={{color:(current !== '/instructor/profile' ) && "#4B0082", backgroundColor:(current == '/instructor/profile')&&"rgba(75,0,130,0.7)"}}>Account</a>
+        </Link> 
         </div>
         </div>     
     );

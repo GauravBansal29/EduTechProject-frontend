@@ -3,7 +3,7 @@ import { useRef , useState} from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { WindowsFilled } from "@ant-design/icons";
-const forgotPassword= ()=>{
+const updatePassword= ()=>{
     const [email, setEmail]= useState('');
     const [otp, setOtp]=useState('');
     const [entercode , setEntercode] =useState(false);
@@ -52,7 +52,7 @@ const forgotPassword= ()=>{
             if(res.status===200) 
             {
                 toast("Password changed successfully");
-                router.push('/login');
+                router.push('/user/profile');
             }
 
             
@@ -119,4 +119,4 @@ const forgotPassword= ()=>{
         
     );
 }
-export default forgotPassword
+export default updatePassword;

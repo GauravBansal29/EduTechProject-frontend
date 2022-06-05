@@ -33,10 +33,11 @@ const TopNav= ()=>{
       process.browser && setCurrent(window.location.pathname.split('/')[1]);
     },[process.browser && window.location.pathname]);
     return (
-      <Menu  mode="horizontal" selectedKeys={[current]} className="shadow-sm mb-1" style={{background: "linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(230,230,250,1) 78%, rgba(208,208,255,0.5) 100%)"}}  >
+      <Menu  mode="horizontal" selectedKeys={[current]} className="navbar mb-1" style={{background: "linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(230,230,250,1) 78%, rgba(208,208,255,0.5) 100%)"}}  >
       <Item key="" style={{float: 'right', borderBottom:"0"}} onClick={(e)=>{setCurrent(e.key)}}>
         <Link href="/"><a style={{color:"#4B0082",fontWeight:"bold", borderBottom:"none" , fontFamily:"Lobster", fontSize:"2.5rem"}}>coursebay</a></Link>
       </Item>
+
       {!user && 
       <>
       <Item key="login" onClick={(e)=>{setCurrent(e.key)}}> 
@@ -44,6 +45,9 @@ const TopNav= ()=>{
       </Item>
       <Item key="register" onClick={(e)=>{setCurrent(e.key)}}>
       <Link href="/register" ><a style={{color:"#4B0082"}} >Register</a></Link>
+      </Item>
+
+      <Item style={{ marginLeft: 'auto' , color:"#4B0082"}} >
       </Item>
       </>}
       

@@ -88,7 +88,7 @@ const Login= ()=>{
          <Link href="/register"><a>Register</a></Link>
         </div>
         <div className="input-group mb-3 text-center mx-auto">
-        <Link href="/forgot-password"><a>Forgot Password?</a></Link>
+        <Link href="/update-password"><a>Forgot Password?</a></Link>
         </div>
         </div>
         </div>
