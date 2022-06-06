@@ -4,7 +4,7 @@ import {Context } from '../../context'
 import UserRoute from '../../components/routes/UserRoute'
 import { useRouter } from 'next/router'
 import {toast} from "react-toastify"
-import {Avatar} from 'antd'
+import {Avatar, Empty} from 'antd'
 import Link from 'next/link'
 const UserIndex=()=>{
     const router= useRouter();
@@ -83,7 +83,7 @@ const UserIndex=()=>{
             <div className='m-3'>
             <h2 style={{fontFamily:"Merriweather", fontWeight:"bold"}} className="mt-4" >User Dashboard</h2>
             {
-                courses.length==0 && <div>No courses to display</div>
+                courses.length==0 && <div ><Empty /></div>
             }
             {/* <pre>{JSON.stringify(courses, null,4)}</pre> */}
             

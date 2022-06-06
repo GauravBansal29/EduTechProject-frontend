@@ -24,8 +24,8 @@ const InstructorNav= ()=>{
         </Link>    
         </div>
         <div className='pb-1'>
-        <Link href="/instructor/profile" >
-            <a className={`nav-link ${current == '/instructor/profile' && 'active'} `} style={{color:(current !== '/instructor/profile' ) && "#4B0082", backgroundColor:(current == '/instructor/profile')&&"rgba(75,0,130,0.7)"}}>Account</a>
+        <Link href="/instructor/account" >
+            <a className={`nav-link ${current == '/instructor/account' && 'active'} `} style={{color:(current !== '/instructor/account' ) && "#4B0082", backgroundColor:(current == '/instructor/account')&&"rgba(75,0,130,0.7)"}}>Account</a>
         </Link> 
         </div>
         </div>     

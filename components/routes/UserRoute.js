@@ -37,7 +37,7 @@ const UserRoute= ({children})=>{
             !hidden ? (
             <div className="container-fluid" style={{ height:'calc(100vh - 50px)'}}>
             <div className="row" style={{}}>
-            <div className="col-md-2 bg-light" style={{height:'calc(100vh - 50px)', overflow:"scroll" ,boxShadow:" 0 3px 5px rgb(0 ,0, 0, 0.2)"}}>
+            <div className="col-md-2 bg-light" style={{boxShadow:" 0 3px 5px rgb(0 ,0, 0, 0.2)"}}>
             <UserNav />
             </div>
             <div className="col-md-10" style={{height:'calc(100vh - 50px)', overflow:"scroll"}}>
