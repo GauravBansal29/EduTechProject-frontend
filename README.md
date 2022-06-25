@@ -47,7 +47,7 @@ A Learning Management system where users can buy affordable courses from instruc
 <h4>User Payments - Details of your past transactions</h4>
 <img width="959" alt="yourpayments" src="https://user-images.githubusercontent.com/77917141/175781141-198b636e-a954-458e-8f1b-be552be25983.png">
 
-<h2>Become a Instructor - Onboarding a instructor by verifying his bank account details</h2>
+<h2>Become a Instructor - Onboarding a instructor for payouts</h2>
 <img width="960" alt="becomeinstructor" src="https://user-images.githubusercontent.com/77917141/175781356-a366bb98-b023-464d-9acd-2a283c0fd576.png">
 <img width="959" alt="addinsdetail" src="https://user-images.githubusercontent.com/77917141/175781354-3fdb3cb4-640f-4f10-b734-6af0a95b0927.png">
 
