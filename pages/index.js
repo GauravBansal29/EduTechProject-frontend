@@ -43,7 +43,7 @@ const Index= ({courses})=>{
 }
 
 export async function getServerSideProps(){
-    const {data}= await axios.get(`http://localhost:8000/api/courses`)
+    const {data}= await axios.get(`https://backend-coursebay.onrender.com/api/courses`)
     return (
         {
             props:

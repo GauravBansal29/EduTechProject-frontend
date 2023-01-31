@@ -9,14 +9,12 @@ const handle= app.getRequestHandler();
 app.prepare().then(
     ()=>{
         const server= express();
-        // apply proxy in only dev mode
-        if(dev)
-        {
+        // apply proxy 
             server.use('/api', createProxyMiddleware({
-                target: 'http://localhost:8000',
+                target: 'https://backend-coursebay.onrender.com',
                 changeOrigin: true,
             }))
-        }
+        
         server.all('*',(req,res)=>{
             return handle(req, res);
         })

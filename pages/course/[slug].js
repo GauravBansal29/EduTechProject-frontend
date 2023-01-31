@@ -230,7 +230,7 @@ const payout= async()=>{
 }
 
 export async function getServerSideProps({query}){
-    const {data}= await axios.get(`http://localhost:8000/api/course/${query.slug}`);
+    const {data}= await axios.get(`https://backend-coursebay.onrender.com/api/course/${query.slug}`);
     return(
         {
             props:{

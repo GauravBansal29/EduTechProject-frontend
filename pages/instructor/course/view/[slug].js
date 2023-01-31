@@ -178,7 +178,7 @@ const CourseView= ()=>{
                 {
                     (course.lessons && course.lessons.length< 5)? 
                     (
-                    <Tooltip placement="bottomRight" title="Need atleast 4 lessons to publish" arrowPointAtCenter>
+                    <Tooltip placement="bottomRight" title="Need atleast 5 lessons to publish" arrowPointAtCenter>
                     <FileExclamationOutlined style={{fontSize:"1.2rem", color:"#999999"}}/>
                     </Tooltip>
                     ):
