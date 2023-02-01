@@ -23,7 +23,7 @@ const Login= ()=>{
         //post request 
         try{
             setLoading(true);
-           const res= await axios.post(`/api/login`, {
+           const res= await axios.post(`https://backend-coursebay.onrender.com/api/login`, {
                     email: email.current.value,
                     password: password.current.value
                 });

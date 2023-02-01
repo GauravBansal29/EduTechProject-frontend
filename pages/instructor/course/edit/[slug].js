@@ -47,7 +47,7 @@ const EditCourse = ()=>{
         const loadstoredData= async()=>{
             if(!router.isReady) return;
             try{
-            const {data}= await axios.get(`/api/course/${slug}`);
+            const {data}= await axios.get(`https://backend-coursebay.onrender.com/api/course/${slug}`);
             setValues(()=>{
                 return (
                 {

@@ -27,7 +27,7 @@ const CourseView= ()=>{
         const getCourse= async ()=>{
             if(!router.isReady) return;
             try{
-            const res= await axios.get(`/api/course/${slug}`);
+            const res= await axios.get(`https://backend-coursebay.onrender.com/api/course/${slug}`);
             setCourse(res.data);
             console.log(course);
             setCourselength(res.data.lessons.length);
@@ -45,7 +45,7 @@ const CourseView= ()=>{
     },[router.isReady])
 
     const editoptions =()=>{
-        router.push(`/instructor/course/edit/${slug}`);
+        router.push(`https://backend-coursebay.onrender.com/instructor/course/edit/${slug}`);
     }
     const videouploadHandler=async (e)=>{
         // upload video to S3   
