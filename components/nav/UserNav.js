@@ -8,7 +8,7 @@ const UserNav=()=>{
     useEffect(()=>{
         const loadisInstructor= async()=>{
             try{
-                const {data}= await axios.get('/api/current-instructor');
+                const {data}= await axios.get('https://backend-coursebay.onrender.com/api/current-instructor');
                 if(data.ok) setIsinstructor(true);
             }
             catch(err)

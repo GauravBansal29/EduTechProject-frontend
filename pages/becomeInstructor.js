@@ -17,7 +17,7 @@ const becomeInstructor=  ()=>{
         // backend will send us a link where we need to redirect user then the stripe will do its authentication and redirect back to us
 
         try{
-            const res =await axios.post(`/api/add-contact`);
+            const res =await axios.post(`https://backend-coursebay.onrender.com/api/add-contact`);
             console.log(res.data);
             //on successful response we will send the modal asking for account details to make a fund account id 
             setVisible(true);
@@ -37,7 +37,7 @@ const becomeInstructor=  ()=>{
         try{
         e.preventDefault();
         console.log(values);
-        const res= await axios.post('/api/add-fundaccount',{
+        const res= await axios.post('https://backend-coursebay.onrender.com/api/add-fundaccount',{
             name: values.name,
             account_number: values.account_number,
             ifsc: values.ifsc_code

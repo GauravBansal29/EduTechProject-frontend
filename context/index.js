@@ -53,7 +53,7 @@ const Provider= ({children})=>{
             if( !res || (res.status === 401 && res.config && !res.config.__isRetryRequest))
             {
                 return new Promise((resolve, reject)=>{
-                    axios.get(`/api/logout`)
+                    axios.get(`https://backend-coursebay.onrender.com/api/logout`)
                     .then((data)=>{
                         dispatch({type:"LOGOUT"});
                         localStorage.removeItem('user');
@@ -71,7 +71,7 @@ const Provider= ({children})=>{
     )
        useEffect(()=>{
             const getcsrfData= async ()=>{
-                const {data}= await axios.get(`/api/csrf-token`);
+                const {data}= await axios.get(`https://backend-coursebay.onrender.com/csrf-token`);
                 axios.defaults.headers["X-XSRF-Token"] = data.csrfToken;
                 console.log(data.csrfToken);
 

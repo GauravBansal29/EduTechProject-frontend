@@ -19,7 +19,7 @@ const InstructorAccount= ()=>{
     useEffect(()=>{
         const fetchUser= async ()=>{
             try{
-            const {data}= await axios.get('/api/get-userdata');
+            const {data}= await axios.get('https://backend-coursebay.onrender.com/api/get-userdata');
             setUser(data);
             }
             catch(err)
@@ -35,7 +35,7 @@ const InstructorAccount= ()=>{
     useEffect(()=>{
         const getPayoutData= async ()=>{
             console.log(user);
-            if(user && user.payments) axios.all(user.payouts.map((item)=>axios.get(`/api/fetch-payout/${item}`))).then((data)=>{
+            if(user && user.payments) axios.all(user.payouts.map((item)=>axios.get(`https://backend-coursebay.onrender.com/api/fetch-payout/${item}`))).then((data)=>{
                 console.log(data);
                let x= data.map((item)=>{
                    setPaidout(()=>{
@@ -69,7 +69,7 @@ const InstructorAccount= ()=>{
         try{
         e.preventDefault();
         console.log(values);
-        const res= await axios.post('/api/add-fundaccount',{
+        const res= await axios.post('https://backend-coursebay.onrender.com/api/add-fundaccount',{
             name: values.name,
             account_number: values.account_number,
             ifsc: values.ifsc_code

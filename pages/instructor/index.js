@@ -12,7 +12,7 @@ const InstructorIndex= ()=>{
         const fetchCourses= async()=>{
             try{
                 console.log("hello");
-                const res= await axios.get('/api/instructor-courses');
+                const res= await axios.get('https://backend-coursebay.onrender.com/api/instructor-courses');
                 if(res.status == 200) 
                 {
                     setCourses(res.data);

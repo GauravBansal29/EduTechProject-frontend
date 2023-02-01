@@ -12,7 +12,7 @@ const StripeCallBack= ()=>{
     useEffect(()=>{
         if(user)
         {
-            axios.post('/api/get-account-status').then(res=>{
+            axios.post('https://backend-coursebay.onrender.com/api/get-account-status').then(res=>{
 
                 dispatch({
                     type: "LOGIN",

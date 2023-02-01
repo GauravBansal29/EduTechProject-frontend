@@ -13,7 +13,7 @@ const UserRoute= ({children})=>{
 
         try{
                console.log(process.env.NEXT_PUBLIC_API);
-                const {data} = await axios.get(`/api/current-user`);
+                const {data} = await axios.get(`https://backend-coursebay.onrender.com/api/current-user`);
                 if(data.ok) setHidden(false);  // verified JWT
                 else {
                     setHidden(true); //JWT failed

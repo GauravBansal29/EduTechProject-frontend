@@ -21,7 +21,7 @@ const SingleCourse= ({course})=>{
     useEffect(()=>{
         const checkEnrollment= async ()=>{
             try{
-                const {data}= await axios.get(`/api/check-enrollment/${slug}`);
+                const {data}= await axios.get(`https://backend-coursebay.onrender.com/api/check-enrollment/${slug}`);
                 if(Object.keys(data.answer).length !== 0) setEnrolled(true);
             }
             catch(err)
@@ -37,7 +37,7 @@ const SingleCourse= ({course})=>{
     const handleFreeEnrollment=async()=>{
         console.log("Free Enrollment");
         try{
-            const res= await axios.put(`/api/free-enrollment/${_id}`);
+            const res= await axios.put(`https://backend-coursebay.onrender.com/api/free-enrollment/${_id}`);
            if(res.status ==200) 
            {
                toast("Successfully enrolled");
@@ -70,9 +70,9 @@ const SingleCourse= ({course})=>{
             try{
                 // button press pr ye API CALL hogi jisme hume bs amount aur currency batani hai
                 console.log(process.env.NEXT_PUBLIC_API);
-                const {data}= await axios.get('/api/get-razorpay-key');
+                const {data}= await axios.get('https://backend-coursebay.onrender.com/api/get-razorpay-key');
                 const razorpayKey= data.key;
-                const res = await axios.post(`/api/create-order`,{
+                const res = await axios.post(`https://backend-coursebay.onrender.com/api/create-order`,{
                     amount: price +'00',
                     currency: "INR"
                 });
@@ -90,7 +90,7 @@ const SingleCourse= ({course})=>{
                     order_id: order_id,
                     handler:async function(response)
                     {
-                        const result= await axios.post(`/api/pay-order/${_id}`,{
+                        const result= await axios.post(`https://backend-coursebay.onrender.com/api/pay-order/${_id}`,{
                             amount: amount,
                             razorpayPaymentId: response.razorpay_payment_id,
                             razorpayOrderId: response.razorpay_order_id,
@@ -125,7 +125,7 @@ const SingleCourse= ({course})=>{
 const updateuser= async()=>{
 // update context
     try{
-        const res= await axios.get('/api/get-userdata');
+        const res= await axios.get('https://backend-coursebay.onrender.com/api/get-userdata');
         dispatch({
             type: "LOGIN",
             payload: res.data,
@@ -143,7 +143,7 @@ const updateuser= async()=>{
 const payout= async()=>{
     try{
         const payout_amount= price*90;
-        const res= await axios.post('/api/payout',{
+        const res= await axios.post('https://backend-coursebay.onrender.com/api/payout',{
             amount: payout_amount,
             instructorid: instructor._id
         });

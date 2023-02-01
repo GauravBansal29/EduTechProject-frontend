@@ -18,7 +18,7 @@ const TopNav= ()=>{
       try{
         dispatch({type:"LOGOUT"});
         localStorage.removeItem("user");
-        const res= await axios.get(`/api/logout`);
+        const res= await axios.get(`https://backend-coursebay.onrender.com/api/logout`);
         toast(res.data);
         router.push("/login");
       }
