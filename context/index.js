@@ -72,7 +72,7 @@ const Provider= ({children})=>{
        useEffect(()=>{
             const getcsrfData= async ()=>{
                 const {data}= await axios.get(`https://backend-coursebay.onrender.com/api/csrf-token`);
-                axios.defaults.headers["X-XSRF-Token"] = data.csrfToken;
+                axios.defaults.headers.common["X-XSRF-Token"] = data.csrfToken;
                 console.log(data.csrfToken);
 
             }
