@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useRouter } from "next/router";
 import InstructorNav from "../nav/InstructorNav";
 // to verify user else it will redirect to login
+// verify
 const InstructorRoute= ({children})=>{
     const [hidden, setHidden] = useState(true);
     const router= useRouter();
