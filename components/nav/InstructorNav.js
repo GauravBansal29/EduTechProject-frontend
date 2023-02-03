@@ -1,7 +1,7 @@
 import {useState , useEffect} from 'react'
 import Link from 'next/link'
 
-
+//instructor nav
 const InstructorNav= ()=>{
 
     const [current, setCurrent] = useState('');
