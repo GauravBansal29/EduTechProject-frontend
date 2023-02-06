@@ -23,13 +23,10 @@ const Login= ()=>{
         //post request 
         try{
             setLoading(true);
-            
+            axios.defaults.withCredentials = true;
            const res= await axios.post(`https://backend-coursebay.onrender.com/api/login`, {
                     email: email.current.value,
                     password: password.current.value
-                },
-                {
-                    withCredentials: true
                 });
                 console.log(res);
         // fetch("https://backend-coursebay.onrender.com/api/login", {
