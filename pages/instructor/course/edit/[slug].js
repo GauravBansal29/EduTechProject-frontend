@@ -81,12 +81,12 @@ const EditCourse = ()=>{
         //image upload 
         try{
             const result = await resizeImage(imgUrl, 720, 500);
-            const imgres = await axios.post('/api/image-upload',{image: result});
+            const imgres = await axios.post('https://backend-coursebay.onrender.com/api/image-upload',{image: result});
             if(imgres.status ===200) 
             {
                 //imgUrl to be changed to aws url i believe 
                 try{
-                    const res= await axios.post('/api/create-course', 
+                    const res= await axios.post('https://backend-coursebay.onrender.com/api/create-course', 
                     {
                         name: values.name , 
                         description: values.description ,
@@ -160,20 +160,20 @@ const EditCourse = ()=>{
             if(imgobj && (imgobj.Location != imgUrl))
             {
                 // changes have been made to the image container
-                const imgdel= await axios.post('/api/image-delete', {image:imgobj});
+                const imgdel= await axios.post('https://backend-coursebay.onrender.com/api/image-delete', {image:imgobj});
                 change=true;
 
             }
             let imgres;
             if(change)
             {
-                imgres = await axios.post('/api/image-upload',{image: imgUrl});
+                imgres = await axios.post('https://backend-coursebay.onrender.com/api/image-upload',{image: imgUrl});
             }
             if(!change || imgres.status ===200) 
             {
                 //imgUrl to be changed to aws url i believe 
                 try{
-                    const res= await axios.put(`/api/update-course/${slug}`, 
+                    const res= await axios.put(`https://backend-coursebay.onrender.com/api/update-course/${slug}`, 
                     {
                         name: values.name , 
                         description: values.description ,
@@ -238,7 +238,7 @@ const EditCourse = ()=>{
            return {...values, lessons: [...alllessons]};
        });
 
-       await axios.put(`/api/update-course-lessons/${slug}`, {lessons: values.lessons});
+       await axios.put(`https://backend-coursebay.onrender.com/api/update-course-lessons/${slug}`, {lessons: values.lessons});
         toast("Lesson order updated");
 
         
@@ -258,11 +258,11 @@ const EditCourse = ()=>{
        });
        console.log(dellesson);
        try{
-        await axios.put(`/api/update-course-lessons/${slug}`, {lessons: values.lessons}); // update lessons of course
+        await axios.put(`https://backend-coursebay.onrender.com/api/update-course-lessons/${slug}`, {lessons: values.lessons}); // update lessons of course
         // we need to delete the video from aws and lesson from lesson modal
-       await axios.post('/api/course/remove-video',{video: dellesson.videolink});
+       await axios.post('https://backend-coursebay.onrender.com/api/course/remove-video',{video: dellesson.videolink});
 
-       await axios.delete(`/api/delete-lesson/${dellesson._id}`);
+       await axios.delete(`https://backend-coursebay.onrender.com/api/delete-lesson/${dellesson._id}`);
 
        }
        catch(err)
@@ -274,7 +274,7 @@ const EditCourse = ()=>{
 
    const removevideoHandler= async()=>{
     try{
-        const res= await axios.post('/api/course/remove-video', {video:current.videolink});
+        const res= await axios.post('https://backend-coursebay.onrender.com/api/course/remove-video', {video:current.videolink});
         console.log(res.data);
         setVideofilename("Upload Video");
         setUploaded(false);
@@ -293,7 +293,7 @@ const videouploadHandler=async (e)=>{
     videoData.append('video', file); // add the video data to this container
     try{
     setUploading(true);
-    const {data}= await axios.post('/api/course/video-upload', videoData);
+    const {data}= await axios.post('https://backend-coursebay.onrender.com/api/course/video-upload', videoData);
         setCurrent(()=>{
             return {...current, videolink: data};
         });
@@ -313,7 +313,7 @@ const videouploadHandler=async (e)=>{
 const updateLessonHandler=async()=>{
     // new need to first update the lesson and then update the lessonlist in the course
     try{
-        const res= await axios.put(`/api/update-lesson/${current._id}`, {
+        const res= await axios.put(`https://backend-coursebay.onrender.com/api/update-lesson/${current._id}`, {
             title: current.title,
             content: current.content,
             videolink: current.videolink,
@@ -325,7 +325,7 @@ const updateLessonHandler=async()=>{
         setValues(()=>{
             return {...values , lessons:alllessons};
         });
-        await axios.put(`/api/update-course-lessons/${slug}`, {lessons: values.lessons}); // update lessons of course
+        await axios.put(`https://backend-coursebay.onrender.com/api/update-course-lessons/${slug}`, {lessons: values.lessons}); // update lessons of course
         setVisible(false);
     }
     catch(err)

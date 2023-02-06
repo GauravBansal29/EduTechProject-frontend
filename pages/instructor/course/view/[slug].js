@@ -55,7 +55,7 @@ const CourseView= ()=>{
         videoData.append('video', file); // add the video data to this container
         try{
         setUploading(true);
-        const {data}= await axios.post('/api/course/video-upload', videoData);
+        const {data}= await axios.post('https://backend-coursebay.onrender.com/api/course/video-upload', videoData);
             setLessonlink(data);
             setUploading(false);
             setUploaded(true);
@@ -71,7 +71,7 @@ const CourseView= ()=>{
     }
     const removevideoHandler= async()=>{
         try{
-            const res= await axios.post('/api/course/remove-video', {video:lessonlink});
+            const res= await axios.post('https://backend-coursebay.onrender.com/api/course/remove-video', {video:lessonlink});
             console.log(res.data);
             setVideofilename("Upload Video");
             setLessonlink({});
@@ -89,7 +89,7 @@ const CourseView= ()=>{
         setModalvisible(false);
         try{
             console.log(lessonlink);
-            const res= await axios.post(`/api/course/lesson/${slug}`, {
+            const res= await axios.post(`https://backend-coursebay.onrender.com/api/course/lesson/${slug}`, {
                 title: lessontitle.current.value,
                 description: lessondesc.current.value ,
                 videolink: lessonlink,
@@ -120,7 +120,7 @@ const CourseView= ()=>{
         try{
         const ans= window.confirm("Are you sure you want to publish the course? \nWarning: Once your course has users you wont be able to unpublish");
         if(!ans) return;
-        const {data}=await axios.put(`/api/course/publish/${slug}`);
+        const {data}=await axios.put(`https://backend-coursebay.onrender.com/api/course/publish/${slug}`);
         setCourse(()=>{
             return {...course, published: true};
         })
@@ -136,7 +136,7 @@ const CourseView= ()=>{
         try{
         const ans= window.confirm("Are you sure you want to unpublish the course?");
         if(!ans) return;
-        const {data}= await axios.put(`/api/course/unpublish/${slug}`);
+        const {data}= await axios.put(`https://backend-coursebay.onrender.com/api/course/unpublish/${slug}`);
         setCourse(()=>{
             return {...course, published: false};
         })

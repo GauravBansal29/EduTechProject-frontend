@@ -20,9 +20,9 @@ const Payment=()=>{
             try{
                 // button press pr ye API CALL hogi jisme hume bs amount aur currency batani hai
                 console.log(process.env.NEXT_PUBLIC_API);
-                const {data}= await axios.get('/api/get-razorpay-key');
+                const {data}= await axios.get('https://backend-coursebay.onrender.com/api/get-razorpay-key');
                 const razorpayKey= data.key;
-                const res = await axios.post(`/api/create-order`,{
+                const res = await axios.post(`https://backend-coursebay.onrender.com/api/create-order`,{
                     amount: aamount.current.value +'00',
                     currency: "INR"
                 });

@@ -24,7 +24,7 @@ const CourseView= ()=>{
     useEffect(()=>{
         const checkEnrollment= async ()=>{
             try{
-                const {data}= await axios.get(`/api/check-enrollment/${slug}`);
+                const {data}= await axios.get(`https://backend-coursebay.onrender.com/api/check-enrollment/${slug}`);
                 if(Object.keys(data.answer).length !== 0) setEnrolled(true);
 
             }
@@ -41,11 +41,11 @@ const CourseView= ()=>{
     useEffect(()=>{
         const loadCourse= async ()=>{
             try{
-            const res= await axios.get(`/api/user/course/${slug}`);
+            const res= await axios.get(`https://backend-coursebay.onrender.com/api/user/course/${slug}`);
             setCourse(res.data);
             if(res && res.data)
             {
-            const {data}= await axios.get(`/api/course-discussions/${res.data._id}`);
+            const {data}= await axios.get(`https://backend-coursebay.onrender.com/api/course-discussions/${res.data._id}`);
             setCoursediscussion(()=>{
                 let m= data;
                 m.sort((a,b)=>{return  new Date(b.createdAt) - new Date(a.createdAt)});
@@ -65,7 +65,7 @@ const CourseView= ()=>{
     useEffect(()=>{
         const getCompleteStatus= async ()=>{
             try{
-                const res= await axios.get(`/api/completed/${course._id}`);
+                const res= await axios.get(`https://backend-coursebay.onrender.com/api/completed/${course._id}`);
                 console.log(res.data);
                 setComplete(()=>{
                     let orrarray= res.data;
@@ -87,7 +87,7 @@ const CourseView= ()=>{
 
     const addDiscussion= async ()=>{
         try{
-            const res= await axios.post('/api/adddiscussion',{
+            const res= await axios.post('https://backend-coursebay.onrender.com/api/adddiscussion',{
                 courseid:course._id,
                 lessonid: course.lessons[clicked]._id,
                 value: newdiscussion
@@ -116,7 +116,7 @@ const CourseView= ()=>{
             // if not included in array then mark as complete and add in state array 
             if( complete.indexOf(course.lessons[clicked]._id) == -1)
             { 
-                const res1= await axios.post('/api/markascomplete', {
+                const res1= await axios.post('https://backend-coursebay.onrender.com/api/markascomplete', {
                     lessonid: course.lessons[clicked]._id,
                     courseid: course._id,
                 });
@@ -127,7 +127,7 @@ const CourseView= ()=>{
             else 
             {
                 // if already there remove from state array and database
-                const res2= await axios.post('/api/markasincomplete', {
+                const res2= await axios.post('https://backend-coursebay.onrender.com/api/markasincomplete', {
                     lessonid: course.lessons[clicked]._id,
                     courseid: course._id
                 });
@@ -150,7 +150,7 @@ const CourseView= ()=>{
             // if not included in array then mark as complete and add in state array 
             if( complete.indexOf(course.lessons[clicked]._id) == -1)
             { 
-                const res1= await axios.post('/api/markascomplete', {
+                const res1= await axios.post('https://backend-coursebay.onrender.com/api/markascomplete', {
                     lessonid: course.lessons[clicked]._id,
                     courseid: course._id,
                 });

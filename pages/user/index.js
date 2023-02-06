@@ -18,7 +18,7 @@ const UserIndex=()=>{
 
         const loadCourses=async()=>{
             try{
-                const {data}= await axios.get(`/api/user-courses`);
+                const {data}= await axios.get(`https://backend-coursebay.onrender.com/api/user-courses`);
                 setCourses(data);
             }
             catch(err)
@@ -36,7 +36,7 @@ const UserIndex=()=>{
         const loadProgress= async()=>{
             
             
-                axios.all(courses.map((course)=>axios.get(`/api/completed/${course._id}`))).then(
+                axios.all(courses.map((course)=>axios.get(`https://backend-coursebay.onrender.com/api/completed/${course._id}`))).then(
                     (data)=>{
                         console.log(data);
 

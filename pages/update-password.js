@@ -13,7 +13,7 @@ const updatePassword= ()=>{
     const onSubmitHandler= async(e)=>{
         e.preventDefault();
         try{
-            const res= await axios.post('/api/generate-otp' ,{email: email});
+            const res= await axios.post('https://backend-coursebay.onrender.com/api/generate-otp' ,{email: email});
             if(res.status === 200)
             {
                 toast(res.data);
@@ -32,7 +32,7 @@ const updatePassword= ()=>{
     const codeResponseHandler=async (e)=>{
         e.preventDefault();
         try{
-        const res= await axios.post('/api/verify-otp', { email: email ,otp : otp});
+        const res= await axios.post('https://backend-coursebay.onrender.com/api/verify-otp', { email: email ,otp : otp});
         if(res.status ===200) setVerified(true);
         }
         catch(err)
@@ -48,7 +48,7 @@ const updatePassword= ()=>{
     const passwordchangeHandler=  async (e)=>{
         e.preventDefault();
         try{
-            const res= await axios.post('/api/change-password', { email: email ,otp : otp, password:password});
+            const res= await axios.post('https://backend-coursebay.onrender.com/api/change-password', { email: email ,otp : otp, password:password});
             if(res.status===200) 
             {
                 toast("Password changed successfully");

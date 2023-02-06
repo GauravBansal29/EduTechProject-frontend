@@ -11,7 +11,7 @@ const Payments= ()=>{
     useEffect(()=>{
         const fetchUser= async ()=>{
             try{
-            const {data}= await axios.get('/api/get-userdata');
+            const {data}= await axios.get('https://backend-coursebay.onrender.com/api/get-userdata');
             setUser(data);
             }
             catch(err)
@@ -27,7 +27,7 @@ const Payments= ()=>{
     
         const fetchPayments= ()=>{
             console.log(user);
-           if(user && user.payments) axios.all(user.payments.map((item)=>axios.get(`/api/fetch-payment/${item}`))).then((data)=>{
+           if(user && user.payments) axios.all(user.payments.map((item)=>axios.get(`https://backend-coursebay.onrender.com/api/fetch-payment/${item}`))).then((data)=>{
                 console.log(data);
                 
                 let x=data.map((r)=>{

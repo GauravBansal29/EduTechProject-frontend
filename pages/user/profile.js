@@ -14,7 +14,7 @@ const UserProfile= ()=>{
     useEffect(()=>{
         const fetchUser = async()=>{
             try{
-         const {data} =await axios.get('/api/get-userdata');
+         const {data} =await axios.get('https://backend-coursebay.onrender.com/api/get-userdata');
                 setName(data.name);
                 setContact(data.contact);
                 setEmail(data.email);
@@ -34,7 +34,7 @@ const UserProfile= ()=>{
     const updateUser= async(e)=>{
         try{
             e.preventDefault();
-            const {data}= await axios.post('/api/update-user', {
+            const {data}= await axios.post('https://backend-coursebay.onrender.com/api/update-user', {
                 name:name,
                 contact:contact,
                 interest: interest

@@ -27,12 +27,12 @@ const CreateCourse =()=>{
         //image upload 
         try{
             const result = await resizeImage(imgUrl, 720, 500);
-            const imgres = await axios.post('/api/image-upload',{image: result});
+            const imgres = await axios.post('https://backend-coursebay.onrender.com/api/image-upload',{image: result});
             if(imgres.status ===200) 
             {
                 //imgUrl to be changed to aws url i believe 
                 try{
-                    const res= await axios.post('/api/create-course', 
+                    const res= await axios.post('https://backend-coursebay.onrender.com/api/create-course', 
                     {
                         name: values.name , 
                         description: values.description ,
@@ -99,14 +99,14 @@ const CreateCourse =()=>{
         //image upload 
         try{
             //const result = await resizeImage(imgUrl, 720, 500);
-            const imgres = await axios.post('/api/image-upload',{image: imgUrl});
+            const imgres = await axios.post('https://backend-coursebay.onrender.com/api/image-upload',{image: imgUrl});
             console.log(imgres.data);
             if(imgres.status ===200) 
             {
                 console.log(imgres.data.Location);
                 //imgUrl to be changed to aws url i believe 
                 try{
-                    const res= await axios.post('/api/create-course', 
+                    const res= await axios.post('https://backend-coursebay.onrender.com/api/create-course', 
                     {
                         name: values.name , 
                         description: values.description ,

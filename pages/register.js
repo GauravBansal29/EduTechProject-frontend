@@ -23,7 +23,7 @@ const Register= ()=>{
         //post request 
         try{
             setLoading(true);
-           const res= await axios.post(`/api/register`, {
+           const res= await axios.post(`https://backend-coursebay.onrender.com/api/register`, {
                     name: name.current.value,
                     email: email.current.value,
                     contact:contact.current.value,
