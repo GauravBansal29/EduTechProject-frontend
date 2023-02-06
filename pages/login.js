@@ -23,25 +23,26 @@ const Login= ()=>{
         //post request 
         try{
             setLoading(true);
-            let res;
-        //    const res= await axios.post(`https://backend-coursebay.onrender.com/api/login`, {
-        //             email: email.current.value,
-        //             password: password.current.value
-        //         },
-        //         {
-        //             credentials: 'include'
-        //         });
-        //         console.log(res);
-        fetch("https://backend-coursebay.onrender.com/api/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: 'include',
-          body: JSON.stringify(user),
-        }).then(response=>{
-            res= response;
-        })
+            
+           const res= await axios.post(`https://backend-coursebay.onrender.com/api/login`, {
+                    email: email.current.value,
+                    password: password.current.value
+                },
+                {
+                    credentials: 'include'
+                });
+                console.log(res);
+        // fetch("https://backend-coursebay.onrender.com/api/login", {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //     "Access-Control-Allow-Origin": "https://backend-coursebay.onrender.com"
+        //   },
+        //   credentials: 'include',
+        //   body: JSON.stringify(user),
+        // }).then(response=>{
+        //     res= response;
+        // })
             setLoading(false);
 
             // add to context the user data (jwt already sent to cookie)
