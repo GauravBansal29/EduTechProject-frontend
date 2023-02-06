@@ -28,7 +28,7 @@ const Login= ()=>{
                     password: password.current.value
                 },
                 {
-                    credentials: 'same-origin'
+                    credentials: 'include'
                 });
                 console.log(res);
             setLoading(false);
