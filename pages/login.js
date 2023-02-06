@@ -26,6 +26,9 @@ const Login= ()=>{
            const res= await axios.post(`https://backend-coursebay.onrender.com/api/login`, {
                     email: email.current.value,
                     password: password.current.value
+                },
+                {
+                    credentials: 'same-origin'
                 });
                 console.log(res);
             setLoading(false);
