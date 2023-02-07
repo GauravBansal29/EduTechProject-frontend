@@ -45,7 +45,7 @@ const CourseView= ()=>{
     },[router.isReady])
 
     const editoptions =()=>{
-        router.push(`https://backend-coursebay.onrender.com/instructor/course/edit/${slug}`);
+        router.push(`/instructor/course/edit/${slug}`);
     }
     const videouploadHandler=async (e)=>{
         // upload video to S3   
