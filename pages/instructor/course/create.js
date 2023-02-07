@@ -194,6 +194,7 @@ const CreateCourse =()=>{
         listType="picture-card"
         className="avatar-uploader"
         showUploadList={false}
+        customRequest={({ onSuccess }) => setTimeout(() => { onSuccess("ok", null); }, 0) }
         beforeUpload= {beforeUpload}
          onChange={handleImage}
         >
