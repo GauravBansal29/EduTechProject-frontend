@@ -50,7 +50,7 @@ const Provider= ({children})=>{
             // any other status code will trigger this 
             let res= error.response;
             
-            if( !res || (res.status === 401 && res.config && !res.config.__isRetryRequest))
+            if(res.status === 401 && res.config && !res.config.__isRetryRequest)
             {
                 return new Promise((resolve, reject)=>{
                     axios.get(`https://backend-coursebay.onrender.com/api/logout`)
