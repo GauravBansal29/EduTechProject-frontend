@@ -14,7 +14,7 @@ const CourseCard = ({course})=>{
         cover={
             <img src= {image.Location} alt={name} style={{height:"200px" , objectFit:"cover"}} className="p-1" />
         }>
-        <h2 className='font-weight-bold'>{name}</h2>
+        <h3 className='font-weight-bold'>{name}</h3>
         <p>by {instructor.name}</p>
         <Badge
         count={category}
