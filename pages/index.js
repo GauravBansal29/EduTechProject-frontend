@@ -26,10 +26,9 @@ const Index= ({courses})=>{
     //     console.log(courses);
     // },[router.isReady])
     const contentStyle= {
-        marginLeft: '10%',
-        marginRight:'10%',
-        height: '500px',
-        width: '80%',
+       
+        height: '550px',
+        width: '100%',
         color: '#fff',
         lineHeight: '160px',
         textAlign: 'center',
@@ -43,13 +42,13 @@ const Index= ({courses})=>{
     <div >
     <Carousel afterChange={onChange} autoplay>
       <div>
-        <img style={contentStyle} src="images/2.jfif" alt="img1" />
+        <img style={contentStyle} src="images/car1.png" alt="img1" />
       </div>
       <div>
-      <img style={contentStyle} src="images/3.jfif" alt="img1"/>
+      <img style={contentStyle} src="images/car2.png" alt="img2"/>
       </div>
       <div>
-      <img style={contentStyle} src="images/1.jfif" alt="img1"/>
+      <img style={contentStyle} src="images/car3.png" alt="img3"/>
       </div>
     </Carousel>
  
