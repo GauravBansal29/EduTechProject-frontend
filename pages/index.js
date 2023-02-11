@@ -26,20 +26,22 @@ const Index= ({courses})=>{
     //     console.log(courses);
     // },[router.isReady])
     const contentStyle= {
-       
+        marginLeft:'1%',
+        marginBottom:"1%",
         height: '550px',
-        width: '100%',
+        width: '98%',
         color: '#fff',
         lineHeight: '160px',
         textAlign: 'center',
         background: '#364d79',
-        borderRadius: '10px'
+        borderRadius: '10px',
+        boxShadow:'0px 0px 50px 8px rgba(224,227,250,1)'
       };
     let onChange=()=>{
 
     }
     return (
-    <div >
+    <div>
     <Carousel afterChange={onChange} autoplay>
       <div>
         <img style={contentStyle} src="images/car1.png" alt="img1" />
